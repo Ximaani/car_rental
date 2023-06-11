@@ -1,4 +1,14 @@
 <?php
+session_start();
+if (!isset($_SESSION['username'])) {
+  header('Location:login.php');
+  die();
+}
+
+?>
+
+
+<?php
 include 'include/header.php';
 
 
@@ -119,8 +129,8 @@ include 'include/nav.php';
         <div class="col-sm-12">
                 <div class="form-group">
                 <label for="">customer</label>
-                <select name="Customer_id" id="Customer_id" class="form-control">
-                
+                <select name="Customer_id" id="Customer_id" class="form-control customers">
+                <option value="0">select customer</option>
                 </select>
                 </div>
 
@@ -129,7 +139,7 @@ include 'include/nav.php';
             <div class="col-sm-12">
                 <div class="form-group">
                 <label for="">amount</label>
-                <input type="text" name="amount" id="amount" class="form-control" required>
+                <input type="text" name="amount" id="amount" class="form-control" readonly>
                 </div>
             </div>
 

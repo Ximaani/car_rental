@@ -33,7 +33,7 @@ function register_customer($conn){
 function read_all_customer($conn){
     $data = array();
     $array_data = array();
-   $query ="select customer_id,fristname from customer";
+   $query ="select * from customer";
     $result = $conn->query($query);
 
 
@@ -81,7 +81,7 @@ function update_customer($conn){
 
     $data = array();
 
-    $query = "UPDATE customer set fristname = '$fristname', lastname = '$lastname', phone = '$phone', city = '$city', state = '$state' WHERE customer_id = '$customer_id ";
+    $query = "UPDATE customer set fristname = '$fristname', lastname = '$lastname', phone = '$phone', city = '$city', state = '$state' WHERE customer_id = '$customer_id'";
      
 
     $result = $conn->query($query);
@@ -104,7 +104,7 @@ function Delete_customer($conn){
     extract($_POST);
     $data = array();
     $array_data = array();
-   $query ="DELETE FROM customer where customer_id = '$customer_id '";
+   $query ="DELETE FROM customer where customer_id='$customer_id'";
     $result = $conn->query($query);
 
 

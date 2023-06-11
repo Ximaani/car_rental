@@ -1,4 +1,15 @@
 <?php
+session_start();
+if (!isset($_SESSION['username'])) {
+  header('Location:login.php');
+  die();
+}
+
+?>
+
+
+
+<?php
 include 'include/header.php';
 
 
@@ -119,25 +130,6 @@ include 'include/nav.php';
                 <option value="0">select Employee</option>
                 </select>
                 </div>
-
-            <div class="col-sm-6 mt-3">
-                <div class="form-group">
-                <label for="">month</label>
-                <input type="text"  name="month" id="month" class="form-control" required>
-                </div>
-
-            </div>
-
-            <div class="col-sm-6 mt-3">
-                <div class="form-group">
-                <label for="">amount</label>
-                <input type="text"  name="amount" id="amount" class="form-control" required>
-                </div>
-
-            </div>
-
-            
-
             </div>
 
             <div class="col-sm-6 mt-3">
@@ -149,10 +141,26 @@ include 'include/nav.php';
 
             </div>
 
+            <div class="col-sm-6 mt-3">
+                <div class="form-group">
+                <select name="month_id" id="month" class="form-control mt-2">
+                <option value="0">select month</option>
+                </select>
+                </div>
+            </div>
 
             <div class="col-sm-6 mt-3">
-                <div class="form-group mt-3">
-                <select name="account_id" id="account_id" class="form-control">
+                <div class="form-group ">
+                <input type="text" name="amount" id="amount" class="form-control mt-2" placeholder="enter amount" required>
+                </div>
+            </div>
+
+
+
+
+            <div class="col-sm-6 mt-3">
+                <div class="form-group">
+                <select name="account_id" id="account_id" class="form-control mt-2">
                 <option value="0">select account</option>
                 </select>
                 </div>
@@ -162,8 +170,7 @@ include 'include/nav.php';
 
             <div class="col-sm-6 mt-3">
                 <div class="form-group">
-                <label for="">date</label>
-                <input type="date" class="form-control" name="date" value="<?php echo Date('Y-m-d'); ?>"  >
+                <input type="date" class="form-control m-2" name="date" id="date" value="<?php echo Date('Y-m-d'); ?>"  >
                 </div>
 
             </div>

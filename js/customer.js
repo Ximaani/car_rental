@@ -266,12 +266,12 @@ function get_customer_info(customer_id) {
         btnAction = "update";
 
         $("#update_id").val(response['customer_id']);
-        $("#emidd").val(response['customer_id']);
-        $("#full_name").val(response['full_name']);
-        $("#customer_type").val(response['Category_id']);
+        $("#fristname").val(response['fristname']);
+        $("#lastname").val(response['lastname']);
         $("#phone").val(response['phone']);
-        $("#Rating").val(response['Rating']);
-        $("#date").val(response['date']);
+        $("#city").val(response['city']);
+        $("#state").val(response['state']);
+        
         $("#customermodal").modal('show');
 
 
@@ -290,11 +290,11 @@ function get_customer_info(customer_id) {
 }
 
 
-function Delete_customer(customer_id ) {
+function Delete_customer(customer_id) {
 
   let sendingData = {
     "action": "Delete_customer",
-    "customer_id ": customer_id 
+    "customer_id": customer_id
   }
 
   $.ajax({

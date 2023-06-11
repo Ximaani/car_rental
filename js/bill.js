@@ -70,7 +70,7 @@ function filleuser() {
 
         })
 
-        $("#id").append(html);
+        $("#user_id").append(html);
 
 
       } else {
@@ -163,6 +163,45 @@ function fillaccount() {
   })
 }
 
+function fillmonth() {
+
+  let sendingData = {
+    "action": "read_all_month"
+  }
+
+  $.ajax({
+    method: "POST",
+    dataType: "JSON",
+    url: "Api/bill.php",
+    data: sendingData,
+
+    success: function (data) {
+      let status = data.status;
+      let response = data.data;
+      let html = '';
+      let tr = '';
+
+      if (status) {
+        response.forEach(res => {
+          html += `<option value="${res['month_id']}">${res['month_name']}</option>`;
+
+        })
+
+        $("#month").append(html);
+
+
+      } else {
+        displaymessage("error", response);
+      }
+
+    },
+    error: function (data) {
+
+    }
+
+  })
+}
+
 function get_bill_info(bill_id) {
 
   let sendingData = {
@@ -218,6 +257,7 @@ $("#billform").on("submit", function (event) {
   let amount = $("#amount").val();
   let user_id = $("#user_id").val();
   let account_id = $("#account_id").val();
+  let date = $("#date").val();
   let id = $("#update_id").val();
 
   let sendingData = {}
@@ -229,6 +269,7 @@ $("#billform").on("submit", function (event) {
       "amount": amount,
       "user_id": user_id,
       "account_id": account_id,
+      "date": date,
       "action": "register_bill"
     }
 
@@ -240,6 +281,7 @@ $("#billform").on("submit", function (event) {
       "amount": amount,
       "user_id": user_id,
       "account_id": account_id,
+      "date": date,
       "action": "update_bill"
     }
   }

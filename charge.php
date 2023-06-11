@@ -1,4 +1,14 @@
 <?php
+session_start();
+if (!isset($_SESSION['username'])) {
+  header('Location:login.php');
+  die();
+}
+
+?>
+
+
+<?php
 include 'include/header.php';
 
 
@@ -138,7 +148,7 @@ include 'include/nav.php';
             <div class="col-sm-12 mt-3">
               <div class="form-group">
                 <label for="">Year</label>
-                <select name="year" id="year">
+                <select name="year" id="year" class="form-group">
                 <?php
                   $start_year = 1900; // set the starting year
                   $current_year = date('Y'); // get the current year
@@ -146,6 +156,8 @@ include 'include/nav.php';
                     echo "<option value=\"$year\">$year</option>";
                   }
                 ?>
+                </select>
+                </div>
                 <!-- <input type="number" min="1900" max="2099" step="1" value="2023" name="year" id="year" class="form-control mt-2" require> -->
               </div>
 

@@ -290,20 +290,6 @@ function Delete_rent(rent_id) {
 
 
 
-$("#taken_date").on("change", function(){
-  let taken_date=$(this).val();
-  console.log(taken_date);
-})
-
-
-$("#return_date").on("change", function(){
-  let return_date=$(this).val();
-  console.log(return_date);
-
-})
-
-
-
 $("#rentTable").on('click', "a.update_info", function () {
   let id = $(this).attr("update_id");
   get_rent_info(id)

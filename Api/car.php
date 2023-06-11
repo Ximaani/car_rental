@@ -170,7 +170,7 @@ function Delete_car($conn){
     extract($_POST);
     $data = array();
     $array_data = array();
-   $query ="DELETE FROM car where emp_id= '$emp_id'";
+   $query ="DELETE FROM car where car_id= '$car_id'";
     $result = $conn->query($query);
 
 

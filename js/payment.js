@@ -1,11 +1,8 @@
 loadpayment();
-// get_payment();
+fill_amount();
 fill_customer();
 fill_payment_method();
 btnAction = "Insert";
-
-
-
 function fill_customer() {
 
   let sendingData = {
@@ -91,7 +88,7 @@ $("#paymentform").on("submit", function (event) {
   event.preventDefault();
 
 
-  let customer_id = $("#customer_id").val();
+  let Customer_id = $("#Customer_id").val();
   let amount = $("#amount").val();
   let payment_method_id = $("#payment_method_id").val();
   let account_id = $("#account_id").val();
@@ -101,7 +98,7 @@ $("#paymentform").on("submit", function (event) {
 
   if (btnAction == "Insert") {
     sendingData = {
-      "customer_id": customer_id,
+      "Customer_id": Customer_id,
       "amount": amount,
       "payment_method_id": payment_method_id,
       "account_id": account_id,
@@ -111,7 +108,7 @@ $("#paymentform").on("submit", function (event) {
   } else {
     sendingData = {
       "payment_id": id,
-      "customer_id": customer_id,
+      "Customer_id": Customer_id,
       "amount": amount,
       "payment_method_id": payment_method_id,
       "account_id": account_id,
@@ -178,7 +175,6 @@ function loadpayment() {
             th += `<th>${r}</th>`;
           }
 
-          th += "<td>Action</td></tr>";
 
 
 
@@ -192,7 +188,6 @@ function loadpayment() {
 
           }
 
-          tr += `<td> <a class="btn btn-info update_info"  update_id=${res['payment_id']}><i class="bi bi-pencil-square" style="color: #fff"></i></a>&nbsp;&nbsp <a class="btn btn-danger delete_info" delete_id=${res['payment_id']}><i class="bi bi-trash" style="color: #fff"></i></a> </td>`
           tr += "</tr>"
 
         })
@@ -208,11 +203,32 @@ function loadpayment() {
   })
 }
 
-function get_payment_info(payment_id) {
+$("#Customer_id").on("change", function(){
+ if($("#Customer_id").val()== 0){
+  $("#amount").val("");
+ }else{
+  console.log("kkkkk");
+ }
+  console.log(customers);
 
-  let sendingData = {
-    "action": "get_payment_info",
-    "payment_id": payment_id
+  fill_amount(customers);
+})
+
+
+$("#paymentform").on("change", "select.customers", function(){
+
+  let customers=$(this).val();
+
+  console.log(customers);
+
+  fill_amount(customers);
+})
+
+ function fill_amount(customer_id){
+
+  let sendingData={
+    "action": "fill_amount",
+    "customer_id": customer_id
   }
 
   $.ajax({
@@ -221,86 +237,25 @@ function get_payment_info(payment_id) {
     url: "Api/payment.php",
     data: sendingData,
 
-    success: function (data) {
-      let status = data.status;
-      let response = data.data;
+    success: function(data){
+      let status=data.status;
+      let response=data.data;
 
+      if(status){
+        response.forEach(res =>{
+          $("#amount").val(res['Total_amount']);
 
-      if (status) {
+        })
 
-        btnAction = "update";
-
-        $("#update_id").val(response['payment_id']);
-        $("#customer_id ").val(response['customer_id ']);
-        $("#amount").val(response['amount']);
-        $("#payment_method_id").val(response['payment_method_id']);
-        $("#account_id").val(response['account_id']);
-        // $("#status").val(response['status']);
-        $("#payment_modal").modal('show');
-
-
-
-
-      } else {
-        displayymessage("error", response);
+      }else{
+        swal("Now", response,"error");
       }
 
-    },
-    error: function (data) {
-
+      
     }
 
+     
   })
 }
-
-function Delete_payment(payment_id) {
-
-  let sendingData = {
-    "action": "Delete_payment",
-    "payment_id": payment_id
-  }
-
-  $.ajax({
-    method: "POST",
-    dataType: "JSON",
-    url: "Api/payment.php",
-    data: sendingData,
-
-    success: function (data) {
-      let status = data.status;
-      let response = data.data;
-
-
-      if (status) {
-
-        swal("Good job!", response, "success");
-        loadpayment();
-
-
-      } else {
-        swal(response);
-      }
-
-    },
-    error: function (data) {
-
-    }
-
-  })
-}
-
-
-
-$("#paymentTable").on('click', "a.update_info", function () {
-  let id = $(this).attr("update_id");
-  get_payment_info(id)
-})
-
-$("#paymentTable").on('click', "a.delete_info", function () {
-  let id = $(this).attr("delete_id");
-  if (confirm("Are you sure To Delete")) {
-    Delete_payment(id)
-
-  }
-
-})
+   
+  

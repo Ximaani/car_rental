@@ -185,7 +185,7 @@ $("#chargeform").on("submit", function (event) {
 
 
       } else {
-        swal("Good job!", response, "error");
+        swal("Unfortunately!", response, "error");
       }
 
     },

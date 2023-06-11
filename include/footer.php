@@ -36,6 +36,7 @@
   <script src="js/bill.js"></script>
   <script src="js/rent.js"></script>
   <script src="js/modal.js"></script>
+  <script src="js/invoice.js"></script>
   <script src="js/jop.js"></script>
   <script src="js/account.js"></script>
   <script src="js/payment.js"></script>

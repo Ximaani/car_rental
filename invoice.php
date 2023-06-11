@@ -50,11 +50,11 @@ include 'include/nav.php';
     <div class="col-sm-12">
       <div class="card">
         <div class="text-end">
-        <button type="button" class="btn btn-success  m-2" data-bs-toggle="modal" data-bs-target="#rent_modal">
-       rent
+        <button type="button" class="btn btn-success  m-2" data-bs-toggle="modal" data-bs-target="#invoice_modal">
+       invoice
          </button>
          </div>
-        <table class="table" id="rentTable">
+        <table class="table" id="invoiceTable">
 
         <thead>
        
@@ -110,15 +110,15 @@ include 'include/nav.php';
   <!-- End #main -->
 
             
-  <div class="modal fade" id="rent_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal fade" id="invoice_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">rent</h1>
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">invoice</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="rentform">
+      <form id="invoiceform">
         <input type="hidden" name="update_id" id="update_id">
         <div class="row">
            
@@ -126,38 +126,52 @@ include 'include/nav.php';
 
 
       
-        <div class="col-sm-12">
+        <div class="col-sm-6">
                 <div class="form-group">
-                <label for="">customer_id</label>
-                <select name="customer_id" id="customer_id" class="form-control">
-                
+                <label for="">customer_name</label>
+                <select name="customers_id" id="customers_id" class="form-control customer_name">
+                <option value="o">select customer_name</option>
                 </select>
                 </div>
 
             </div>
 
-            <div class="col-sm-12">
+            <div class="col-sm-6">
                 <div class="form-group">
-                <label for="">car_id</label>
-                <select name="car_id" id="car_id" class="form-control">
-                
-                </select>
+                <label for="">car_name</label>
+                <input type="text" name="cars_id" id="cars_id" class="form-control" readonly>
                 </div>
 
             </div>
 
-            <div class="col-sm-12 mt-3">
+            <div class="col-sm-6 mt-3">
+                <div class="form-group">
+                <label for="">rental_price</label>
+                <input type="number" class="form-control" name="rental_price" id="rental_price" readonly>
+                </div>
+
+            </div>
+
+            <div class="col-sm-6 mt-3">
                 <div class="form-group">
                 <label for="">taken_date</label>
-                <input type="date" class="form-control" name="taken_date" id="taken_date">
+                <input type="text" class="form-control" name="taken_date" id="taken_date" readonly>
                 </div>
 
             </div>
 
-            <div class="col-sm-12 mt-3">
+            <div class="col-sm-6 mt-3">
                 <div class="form-group">
                 <label for="">return_date</label>
-                <input type="date" class="form-control" name="return_date" id="return_date">
+                <input type="text" class="form-control" name="return_date" id="return_date" readonly>
+                </div>
+
+            </div>
+
+            <div class="col-sm-6 mt-3">
+                <div class="form-group">
+                <label for="">total_amount</label>
+                <input type="number" class="form-control" name="total_amount" id="total_amount" readonly>
                 </div>
 
             </div>
@@ -166,8 +180,8 @@ include 'include/nav.php';
 
             <!-- <div class="col-sm-12">
                 <div class="form-group">
-                <label for="">rent_price</label>
-                <input type="text" name="rent_price" id="rent_price" class="form-control" required>
+                <label for="">invoice_price</label>
+                <input type="text" name="invoice_price" id="invoice_price" class="form-control" required>
                 </div>
             </div>
 

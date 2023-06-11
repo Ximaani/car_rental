@@ -144,6 +144,20 @@
       </ul>
     </li>
 
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#invoice-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-menu-button-wide"></i><span>invoice </span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="invoice-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+        <li>
+          <a href="invoice.php">
+            <i class="bi bi-circle"></i><span>invoice</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
 
     <li class="nav-item">
       <a class="nav-link collapsed" data-bs-target="#jop-nav" data-bs-toggle="collapse" href="#">
@@ -171,11 +185,20 @@
             <i class="bi bi-circle"></i><span>account </span>
           </a>
         </li>
+      </ul>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#expense-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-menu-button-wide"></i><span>expense </span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="expense-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
 
-
-
-
-
+        <li>
+          <a href="expense.php">
+            <i class="bi bi-circle"></i><span>expense </span>
+          </a>
+        </li>
       </ul>
     </li>
 

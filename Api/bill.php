@@ -9,7 +9,7 @@ include '..//config/conn.php';
 function register_bill($conn){
     extract($_POST);
     $data = array();
-    $query = "INSERT INTO bill (emp_id, month, amount, user_id, account_id,date)
+    $query = "INSERT INTO bill (emp_id, month,amount,user_id,account_id,date)
      values('$emp_id', '$month', '$amount', '$user_id', '$account_id', '$date')";
 
     $result = $conn->query($query);
@@ -54,7 +54,7 @@ function read_all_employee($conn){
 function read_all_user($conn){
     $data = array();
     $array_data = array();
-   $query ="select * from users";
+   $query ="select id, username from users";
     $result = $conn->query($query);
 
 
@@ -72,6 +72,30 @@ function read_all_user($conn){
 
     echo json_encode($data);
 }
+
+function read_all_month($conn){
+    $data = array();
+    $array_data = array();
+   $query ="select month_id, month_name from month";
+    $result = $conn->query($query);
+
+
+    if($result){
+        while($row = $result->fetch_assoc()){
+            $array_data[] = $row;
+        }
+        $data = array("status" => true, "data" => $array_data);
+
+
+    }else{
+        $data = array("status" => false, "data"=> $conn->error);
+             
+    }
+
+    echo json_encode($data);
+}
+
+
 
 function read_all_bill($conn){
     $data = array();
