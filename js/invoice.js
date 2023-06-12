@@ -217,7 +217,7 @@ function loadinvoice() {
           $("#rental_price").val(res['rental_price']);
           $("#taken_date").val(res['taken_date']);
           $("#return_date").val(res['return_date']);
-          $("#total_amount").val(res['Total_amount']);
+          $("#total_amount").val(res['amount']);
 
         })
 

@@ -148,9 +148,9 @@ include 'include/nav.php';
             <div class="col-sm-12 mt-3">
               <div class="form-group">
                 <label for="">Year</label>
-                <select name="year" id="year" class="form-group">
+                <select name="year" id="year" class="form-control">
                 <?php
-                  $start_year = 1900; // set the starting year
+                  $start_year = 2010; // set the starting year
                   $current_year = date('Y'); // get the current year
                   for ($year = $current_year; $year >= $start_year; $year--) {
                     echo "<option value=\"$year\">$year</option>";
@@ -172,9 +172,7 @@ include 'include/nav.php';
             <div class="col-sm-12">
                 <div class="form-group">
                 <label for="">User</label>
-                <select name="user_idd" id="user_idd" class="form-control">
-                  <option value="select user">select user</option>
-                </select>
+                <input type="text" id="user_idd" class="form-control" value="<?php  echo $_SESSION['username'] ?>" readonly>
                 </div>
 
             

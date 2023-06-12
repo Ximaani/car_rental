@@ -124,59 +124,29 @@ include 'include/nav.php';
             
        
 
-            <div class="col-sm-6 mt-3">
+            <div class="col-sm-12 mt-3">
                 <div class="form-group">
-                <select name="emp_id" id="emp_id" class="form-control">
+                <select name="empol_id" id="empol_id" class="form-control employees">
                 <option value="0">select Employee</option>
                 </select>
                 </div>
             </div>
 
-            <div class="col-sm-6 mt-3">
-                <div class="form-group">
-                <select name="user_id" id="user_id" class="form-control">
-                <option value="0">select user</option>
-                </select>
-                </div>
-
-            </div>
-
-            <div class="col-sm-6 mt-3">
-                <div class="form-group">
-                <select name="month_id" id="month" class="form-control mt-2">
-                <option value="0">select month</option>
-                </select>
-                </div>
-            </div>
-
-            <div class="col-sm-6 mt-3">
-                <div class="form-group ">
-                <input type="text" name="amount" id="amount" class="form-control mt-2" placeholder="enter amount" required>
-                </div>
-            </div>
-
-
-
-
-            <div class="col-sm-6 mt-3">
-                <div class="form-group">
-                <select name="account_id" id="account_id" class="form-control mt-2">
-                <option value="0">select account</option>
-                </select>
-                </div>
-
-            </div>
-
-
-            <div class="col-sm-6 mt-3">
-                <div class="form-group">
-                <input type="date" class="form-control m-2" name="date" id="date" value="<?php echo Date('Y-m-d'); ?>"  >
-                </div>
-
-            </div>
-
-
             
+
+        
+            <div class="col-sm-12 mt-3">
+                <div class="form-group ">
+                <input type="text" name="amount" id="amount" class="form-control mt-2" placeholder="enter amount" readonly>
+                </div>
+            </div>
+
+            <div class="col-sm-12 mt-3">
+                <div class="form-group">
+                   <input type="text" name="users" id="users" value="<?php  echo $_SESSION['username'] ?>"  class="form-control" readonly>
+                </div>
+
+            </div>
 
 
            

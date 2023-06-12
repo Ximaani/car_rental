@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 11, 2023 at 07:35 PM
+-- Generation Time: Jun 12, 2023 at 07:30 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -25,6 +25,14 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `amount_pl` (IN `_emp_id` INT)   BEGIN
+
+SELECT sum(Amount) as salary FROM charge WHERE emp_id=_emp_id
+and active=0;
+
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_charging` (IN `_month_id` INT, IN `_year` VARCHAR(50), IN `_description` TEXT, IN `_account_id` INT, IN `_user_id` VARCHAR(100))   BEGIN
 
 if(read_salary() > read_balance(_account_id))THEN
@@ -70,6 +78,12 @@ END if;
 
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `read_all_rent_per_day` (IN `_customer_id` INT)   BEGIN
+
+SELECT c.car_name,c.rental_price,r.taken_date,r.return_date, TIMESTAMPDIFF(DAY,r.taken_date,r.return_date)*c.rental_price as amount from rent r JOIN car c on r.car_id=c.car_id where customer_id=_customer_id;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `read_level` (IN `_course_id` INT)   BEGIN
 
 SELECT c.Course_id,l.level_id,l.level_name  from course c JOIN level l on c.level_id=l.level_id WHERE c.Course_id=_course_id;
@@ -79,15 +93,74 @@ SELECT c.Course_id,l.level_id,l.level_name  from course c JOIN level l on c.leve
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `read_rent_price` (IN `_customers_id` INT)   BEGIN
-SELECT ca.car_id,ca.car_name,ca.rental_price, r.taken_date,r.return_date,TIMESTAMPDIFF(DAY,r.taken_date,r.return_date)*ca.rental_price as Total_amount from rent r JOIN car ca on r.car_id=ca.car_id JOIN customer c on r.customer_id=c.customer_id where r.customer_id=_customers_id;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `read_rent_price` (IN `_customer_id` INT)   BEGIN
+SELECT i.total_amount from invoice i  WHERE i.customer_id=_customer_id;
 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `register_expense_sp` (IN `_id` INT, IN `_amount` FLOAT(12,0), IN `_type` VARCHAR(100), IN `_desc` TEXT, IN `_userId` VARCHAR(100), IN `_Account_id` INT)   BEGIN
+ if(_type = 'Expense')THEN
+
+if((SELECT read_balance(_Account_id) < _amount))THEN
+
+SELECT 'Deny' as Message;
+
+ELSE
+
+INSERT into expense(expense.amount,expense.type,expense.description,expense.user_id,expense.Account_id)
+VALUES(_amount,_type,_desc,_userId,_Account_id);
+
+SELECT 'Registered' as Message;
+
+END if;
+ELSE
+if(_type = 'Expense')THEN
+
+if((SELECT read_balance(_Account_id) < _amount))THEN
+
+SELECT 'Deny' as Message;
+END IF;
+ELSE
+if EXISTS( SELECT * FROM expense WHERE expense.id = _id)THEN
+UPDATE expense SET expense.amount = _amount, expense.type = _type, expense.description = _desc,expense.user_id=_userId,expense.Account_id=_Account_id
+WHERE expense.id = _id;
+
+SELECT 'Updated' as Message;
+ELSE
+
+INSERT into expense(expense.amount,expense.type,expense.description,expense.user_id,expense.Account_id)
+VALUES(_amount,_type,_desc,_userId,_Account_id);
+
+SELECT 'Registered' as Message;
+
+END if;
+END IF;
+
+END if;
 
 END$$
 
 --
 -- Functions
 --
+CREATE DEFINER=`root`@`localhost` FUNCTION `get_user_balance_fn` (`_userId` VARCHAR(50)) RETURNS FLOAT(12,0)  BEGIN
+
+SET @balance= 00.0;
+
+SET @income = (SELECT SUM(expense.amount) FROM expense WHERE
+              expense.type='income' AND expense.user_id= _userId);
+
+
+SET @expense = (SELECT SUM(expense.amount) FROM expense WHERE
+              expense.type='Expense' AND expense.user_id= _userId);
+
+SET @balance = (ifnull(@income,0) - ifnull(@expense,0));
+
+RETURN @balance;
+
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `read_balance` (`_account_id` INT) RETURNS INT(11)  BEGIN
 set @balance=0.00;
 SELECT sum(balance)into @balance from account
@@ -127,9 +200,9 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`account_id`, `bank_name`, `holder_name`, `account_number`, `balance`, `date`) VALUES
-(1, 'Salaam Bank', 'Mohamed Abdullahi Omer', '1234567', '3920', '2023-06-10 08:09:22'),
-(2, 'dahabshiil', 'garaad xuseen', '12345', '0', '2023-06-10 08:10:01'),
-(3, 'Premmier Bank', 'Raashid moalim', '123459', '4820', '2023-06-08 20:06:38');
+(1, 'Salaam Bank', 'Mohamed Abdullahi Omer', '1234567', '520', '2023-06-12 10:24:39'),
+(2, 'dahabshiil', 'garaad xuseen', '12345', '100', '2023-06-12 16:29:04'),
+(3, 'Premmier Bank', 'Raashid moalim', '123459', '37520', '2023-06-12 17:08:28');
 
 -- --------------------------------------------------------
 
@@ -140,21 +213,31 @@ INSERT INTO `account` (`account_id`, `bank_name`, `holder_name`, `account_number
 CREATE TABLE `bill` (
   `bill_id` int(11) NOT NULL,
   `emp_id` int(11) NOT NULL,
-  `month` varchar(100) NOT NULL,
   `amount` decimal(9,2) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `account_id` int(11) NOT NULL,
-  `date` date NOT NULL
+  `user` varchar(40) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `bill`
 --
 
-INSERT INTO `bill` (`bill_id`, `emp_id`, `month`, `amount`, `user_id`, `account_id`, `date`) VALUES
-(3, 1, '1', '0.00', 1, 1, '0000-00-00'),
-(11, 2, '2', '250.00', 0, 2, '2023-05-31'),
-(13, 1, '2', '250.00', 0, 2, '2023-06-03');
+INSERT INTO `bill` (`bill_id`, `emp_id`, `amount`, `user`, `date`) VALUES
+(1, 2, '180.00', 'ximaani', '2023-06-12 17:29:18');
+
+--
+-- Triggers `bill`
+--
+DELIMITER $$
+CREATE TRIGGER `update_active` AFTER INSERT ON `bill` FOR EACH ROW BEGIN
+
+update charge set active =1
+WHERE emp_id=new.emp_id;
+
+
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -224,6 +307,7 @@ CREATE TABLE `charge` (
   `description` text NOT NULL,
   `account_id` int(11) NOT NULL,
   `user_id` varchar(100) NOT NULL,
+  `active` int(11) NOT NULL DEFAULT 0,
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -231,12 +315,12 @@ CREATE TABLE `charge` (
 -- Dumping data for table `charge`
 --
 
-INSERT INTO `charge` (`charge_id`, `emp_id`, `title_id`, `Amount`, `month_id`, `year`, `description`, `account_id`, `user_id`, `date`) VALUES
-(1, 2, 1, '180', 1, '2023', 'mushaar', 2, 'USR001', '2023-06-09 21:00:00'),
-(2, 2, 1, '180', 2, '2023', 'mushaar', 1, 'USR001', '2023-06-09 21:00:00'),
-(3, 2, 1, '180', 3, '2023', 'mushaar', 1, 'USR001', '2023-06-09 21:00:00'),
-(4, 2, 1, '180', 5, '2023', 'mushaar', 1, 'USR001', '2023-06-09 21:00:00'),
-(5, 2, 1, '180', 6, '2023', 'mushaar', 2, 'USR001', '2023-06-09 21:00:00');
+INSERT INTO `charge` (`charge_id`, `emp_id`, `title_id`, `Amount`, `month_id`, `year`, `description`, `account_id`, `user_id`, `active`, `date`) VALUES
+(1, 2, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-12 17:29:18'),
+(2, 3, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-11 21:00:00'),
+(3, 5, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-11 21:00:00'),
+(4, 1, 2, '800', 1, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-11 21:00:00'),
+(5, 4, 2, '800', 1, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-11 21:00:00');
 
 --
 -- Triggers `charge`
@@ -303,7 +387,52 @@ CREATE TABLE `employee` (
 
 INSERT INTO `employee` (`emp_id`, `emp_first_name`, `emp_last_name`, `phone`, `address`, `title_id`, `branch_id`, `date`) VALUES
 (1, 'anwar', 'km', '6544332', 'kraan', 2, 1, '2023-06-08 19:59:47'),
-(2, 'kaariye', 'yuusuf', '6544332', 'karaan', 1, 1, '2023-06-10 08:04:46');
+(2, 'kaariye', 'yuusuf', '6544332', 'karaan', 1, 1, '2023-06-10 08:04:46'),
+(3, 'kk', 'hh', '6544332', 'karaan', 1, 1, '2023-06-11 18:40:20'),
+(4, 'ximaa', 'ni', '64753', 'karaan', 2, 1, '2023-06-12 12:43:52'),
+(5, 'yuusuf', 'xasan', '566656', 'hodan', 1, 2, '2023-06-12 16:51:14');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `expense`
+--
+
+CREATE TABLE `expense` (
+  `id` int(11) NOT NULL,
+  `amount` float(11,2) NOT NULL,
+  `type` varchar(15) NOT NULL,
+  `description` text NOT NULL,
+  `user_id` varchar(50) NOT NULL,
+  `Account_id` int(11) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `expense`
+--
+
+INSERT INTO `expense` (`id`, `amount`, `type`, `description`, `user_id`, `Account_id`, `date`) VALUES
+(1, 100.00, 'Expense', 'mushaar', 'ximaani', 2, '2023-06-12 16:29:04');
+
+--
+-- Triggers `expense`
+--
+DELIMITER $$
+CREATE TRIGGER `update_accountt` AFTER INSERT ON `expense` FOR EACH ROW BEGIN
+    IF NEW.type = 'Income' THEN
+        UPDATE account
+        SET balance = balance+new.amount
+        WHERE account_id=new.Account_id;
+        
+        ELSE
+                UPDATE account
+        SET balance = balance-new.amount
+        WHERE account_id=new.Account_id;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -327,11 +456,9 @@ CREATE TABLE `invoice` (
 --
 
 INSERT INTO `invoice` (`invoice_id`, `customer_id`, `car_id`, `rental_price`, `taken_date`, `return_date`, `total_amount`, `date`) VALUES
-('INV001', 3, 'barada', '180', '2023-06-01', '2023-06-22', '3780', '2023-06-10 13:59:50'),
-('INV002', 3, 'barada', '180', '2023-06-01', '2023-06-22', '3780', '2023-06-10 14:00:01'),
-('INV003', 1, 'zuzuki', '50', '2023-06-01', '2023-06-16', '750', '2023-06-10 14:00:14'),
-('INV004', 3, 'barada', '180', '2023-06-01', '2023-06-22', '3780', '2023-06-10 14:08:44'),
-('INV005', 1, 'zuzuki', '50', '2023-06-01', '2023-06-16', '750', '2023-06-10 14:12:14');
+('INV001', 1, 'zuzuki', '50', '2023-06-01', '2023-06-16', '0', '2023-06-12 09:06:22'),
+('INV002', 3, 'barada', '180', '2023-06-01', '2023-06-22', '0', '2023-06-12 09:06:27'),
+('INV003', 6, 'marshedis', '60', '2023-06-20', '2023-06-30', '600', '2023-06-12 17:23:10');
 
 -- --------------------------------------------------------
 
@@ -351,7 +478,8 @@ CREATE TABLE `jop_title` (
 --
 
 INSERT INTO `jop_title` (`title_id`, `position`, `salary`, `date`) VALUES
-(1, 'cleaner', 180, '2023-06-08 20:19:39');
+(1, 'cleaner', 180, '2023-06-08 20:19:39'),
+(2, 'manager', 800, '2023-06-12 10:16:01');
 
 -- --------------------------------------------------------
 
@@ -418,17 +546,19 @@ CREATE TABLE `payment` (
 --
 
 INSERT INTO `payment` (`payment_id`, `customer_id`, `amount`, `payment_method_id`, `account_id`, `date`) VALUES
-(4, 3, '1760.00', 6, 2, '2023-06-10 09:10:14');
+(1, 1, '750.00', 1, 1, '2023-06-12 09:06:22'),
+(2, 3, '3780.00', 1, 1, '2023-06-12 09:06:27');
 
 --
 -- Triggers `payment`
 --
 DELIMITER $$
-CREATE TRIGGER `update_price` AFTER INSERT ON `payment` FOR EACH ROW begin
+CREATE TRIGGER `update_amount` AFTER INSERT ON `payment` FOR EACH ROW BEGIN
 
-UPDATE rent SET Total_amount=Total_amount-new.amount
-WHERE customer_id=customer_id;
-end
+UPDATE invoice i SET i.total_amount=i.total_amount-new.amount
+WHERE i.customer_id=new.customer_id;
+
+END
 $$
 DELIMITER ;
 
@@ -473,7 +603,8 @@ CREATE TABLE `rent` (
 
 INSERT INTO `rent` (`rent_id`, `customer_id`, `car_id`, `taken_date`, `return_date`, `date`) VALUES
 (1, 3, 4, '2023-06-01', '2023-06-22', '2023-06-10 09:56:38'),
-(5, 1, 2, '2023-06-01', '2023-06-16', '2023-06-10 12:43:43');
+(5, 1, 2, '2023-06-01', '2023-06-16', '2023-06-10 12:43:43'),
+(7, 6, 5, '2023-06-20', '2023-06-30', '2023-06-12 17:21:59');
 
 -- --------------------------------------------------------
 
@@ -535,7 +666,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `emp_id`, `username`, `password`, `image`, `status`, `date`) VALUES
-('USR001', 1, 'anwar', '81dc9bdb52d04dc20036dbd8313ed055', 'USR001.png', 'active', '2023-06-08 20:53:17');
+('USR001', 1, 'anwar', '81dc9bdb52d04dc20036dbd8313ed055', 'USR001.png', 'active', '2023-06-08 20:53:17'),
+('USR002', 3, 'kk', 'd41d8cd98f00b204e9800998ecf8427e', 'USR002.png', 'active', '2023-06-11 19:42:50'),
+('USR003', 4, 'ximaani', '81dc9bdb52d04dc20036dbd8313ed055', 'USR003.png', 'active', '2023-06-12 12:44:20');
 
 --
 -- Indexes for dumped tables
@@ -552,8 +685,7 @@ ALTER TABLE `account`
 --
 ALTER TABLE `bill`
   ADD PRIMARY KEY (`bill_id`),
-  ADD KEY `emp_id` (`emp_id`),
-  ADD KEY `account_id` (`account_id`);
+  ADD KEY `emp_id` (`emp_id`);
 
 --
 -- Indexes for table `branch`
@@ -574,7 +706,8 @@ ALTER TABLE `car`
 -- Indexes for table `charge`
 --
 ALTER TABLE `charge`
-  ADD PRIMARY KEY (`charge_id`);
+  ADD PRIMARY KEY (`charge_id`),
+  ADD UNIQUE KEY `emp_id` (`emp_id`,`month_id`);
 
 --
 -- Indexes for table `customer`
@@ -589,6 +722,12 @@ ALTER TABLE `employee`
   ADD PRIMARY KEY (`emp_id`),
   ADD KEY `title_id` (`title_id`),
   ADD KEY `branch_id` (`branch_id`);
+
+--
+-- Indexes for table `expense`
+--
+ALTER TABLE `expense`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `invoice`
@@ -670,7 +809,7 @@ ALTER TABLE `account`
 -- AUTO_INCREMENT for table `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `branch`
@@ -688,7 +827,7 @@ ALTER TABLE `car`
 -- AUTO_INCREMENT for table `charge`
 --
 ALTER TABLE `charge`
-  MODIFY `charge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `charge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -700,13 +839,19 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `expense`
+--
+ALTER TABLE `expense`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `jop_title`
 --
 ALTER TABLE `jop_title`
-  MODIFY `title_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `title_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `modal`
@@ -724,7 +869,7 @@ ALTER TABLE `month`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `payment_method`
@@ -736,7 +881,7 @@ ALTER TABLE `payment_method`
 -- AUTO_INCREMENT for table `rent`
 --
 ALTER TABLE `rent`
-  MODIFY `rent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `rent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `transmission`
@@ -753,13 +898,6 @@ ALTER TABLE `typefuel`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `bill`
---
-ALTER TABLE `bill`
-  ADD CONSTRAINT `bill_ibfk_1` FOREIGN KEY (`emp_id`) REFERENCES `employee` (`emp_id`),
-  ADD CONSTRAINT `bill_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`);
 
 --
 -- Constraints for table `car`

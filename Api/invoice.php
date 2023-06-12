@@ -58,7 +58,8 @@ function read_all_invoice($conn){
 function read_rent_price($conn){
     extract($_POST);
     $data = array();
-    $query = "call read_rent_price('$customer_id')";
+    $array_data = array();
+    $query = "call read_all_rent_per_day('$customer_id')";
 
     $result = $conn->query($query);
 

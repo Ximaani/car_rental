@@ -46,7 +46,7 @@ function register_charge($conn){
 function read_all_charge($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT ch.charge_id, concat(e.emp_first_name,' ', e.emp_last_name) AS employee_name,j.position,ch.Amount,m.month_name,ch.year,ch.description,a.bank_name,u.username,ch.date FROM charge ch JOIN employee e on e.emp_id=ch.emp_id JOIN jop_title j on j.title_id=ch.title_id JOIN month m ON m.month_id=ch.month_id JOIN account a ON a.account_id=ch.account_id JOIN users u on u.id=ch.user_id";
+   $query ="SELECT ch.charge_id,concat(e.emp_first_name,' ',e.emp_last_name) AS employee_name,j.position,ch.Amount,m.month_name,ch.year,ch.description,a.bank_name,ch.user_id as user,ch.active FROM charge ch JOIN employee e ON e.emp_id=ch.emp_id JOIN jop_title j ON j.title_id=ch.title_id JOIN month m ON m.month_id=ch.month_id JOIN account a ON a.account_id=ch.account_id order by ch.charge_id";
     $result = $conn->query($query);
 
 

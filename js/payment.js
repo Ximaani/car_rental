@@ -243,7 +243,7 @@ $("#paymentform").on("change", "select.customers", function(){
 
       if(status){
         response.forEach(res =>{
-          $("#amount").val(res['Total_amount']);
+          $("#amount").val(res['total_amount']);
 
         })
 

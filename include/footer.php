@@ -45,6 +45,7 @@
   <script src="js/login.js"></script>
   <script src="js/dash.js"></script>
   <script src="js/customer.js"></script>
+  <script src="js/expense.js"></script>
 
 
 

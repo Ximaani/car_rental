@@ -9,8 +9,8 @@ include '..//config/conn.php';
 function register_bill($conn){
     extract($_POST);
     $data = array();
-    $query = "INSERT INTO bill (emp_id, month,amount,user_id,account_id,date)
-     values('$emp_id', '$month', '$amount', '$user_id', '$account_id', '$date')";
+    $query = "INSERT INTO bill (emp_id, amount, user)
+     values('$empol_id', '$amount', '$users')";
 
     $result = $conn->query($query);
 
@@ -18,7 +18,7 @@ function register_bill($conn){
     if($result){
 
        
-            $data = array("status" => true, "data" => "successfully Registered 😂😊😒😎");
+            $data = array("status" => true, "data" => "Transaction success");
 
 
     }else{
@@ -29,10 +29,11 @@ function register_bill($conn){
     echo json_encode($data);
 }
 
-function read_all_employee($conn){
+function read_all_employeeee($conn){
     $data = array();
     $array_data = array();
-   $query ="select * from employee";
+   $query ="SELECT Distinct e.emp_id,concat(e.emp_first_name, ' ', e.emp_last_name) as employename FROM charge ch JOIN employee e on ch.emp_id=e.emp_id
+   WHERE ch.active=0";
     $result = $conn->query($query);
 
 
@@ -51,10 +52,14 @@ function read_all_employee($conn){
     echo json_encode($data);
 }
 
-function read_all_user($conn){
+
+function fill_amount_bill($conn){
+    extract($_POST);
     $data = array();
     $array_data = array();
-   $query ="select id, username from users";
+
+    $query = "call amount_pl('$empol_id')";
+
     $result = $conn->query($query);
 
 
@@ -72,29 +77,6 @@ function read_all_user($conn){
 
     echo json_encode($data);
 }
-
-function read_all_month($conn){
-    $data = array();
-    $array_data = array();
-   $query ="select month_id, month_name from month";
-    $result = $conn->query($query);
-
-
-    if($result){
-        while($row = $result->fetch_assoc()){
-            $array_data[] = $row;
-        }
-        $data = array("status" => true, "data" => $array_data);
-
-
-    }else{
-        $data = array("status" => false, "data"=> $conn->error);
-             
-    }
-
-    echo json_encode($data);
-}
-
 
 
 function read_all_bill($conn){
@@ -119,97 +101,6 @@ function read_all_bill($conn){
     echo json_encode($data);
 }
 
-function read_all_account($conn){
-    $data = array();
-    $array_data = array();
-   $query ="SELECT * FROM account";
-    $result = $conn->query($query);
-
-
-    if($result){
-        while($row = $result->fetch_assoc()){
-            $array_data[] = $row;
-        }
-        $data = array("status" => true, "data" => $array_data);
-
-
-    }else{
-        $data = array("status" => false, "data"=> $conn->error);
-             
-    }
-
-    echo json_encode($data);
-}
-
-
-
-function get_bill_info($conn){
-    extract($_POST);
-    $data = array();
-    $array_data = array();
-   $query ="SELECT *FROM bill where bill_id= '$bill_id'";
-    $result = $conn->query($query);
-
-
-    if($result){
-        $row = $result->fetch_assoc();
-        
-        $data = array("status" => true, "data" => $row);
-
-
-    }else{
-        $data = array("status" => false, "data"=> $conn->error);
-             
-    }
-
-    echo json_encode($data);
-}
-
-function update_bill($conn){
-    extract($_POST);
-
-    $data = array();
-
-    $query = "UPDATE bill set emp_id = '$emp_id', month = '$month', amount = '$amount', user_id = '$user_id', account_id = '$account_id' WHERE bill_id = '$bill_id'";
-     
-
-    $result = $conn->query($query);
-
-
-    if($result){
-
-            $data = array("status" => true, "data" => "successfully updated 😂😊😒😎");
-
-
-    }else{
-        $data = array("status" => false, "data"=> $conn->error);
-             
-    }
-
-    echo json_encode($data);
-}
-
-function Delete_bill($conn){
-    extract($_POST);
-    $data = array();
-    $array_data = array();
-   $query ="DELETE FROM bill where bill_id= '$bill_id'";
-    $result = $conn->query($query);
-
-
-    if($result){
-   
-        
-        $data = array("status" => true, "data" => "successfully Deleted😎");
-
-
-    }else{
-        $data = array("status" => false, "data"=> $conn->error);
-             
-    }
-
-    echo json_encode($data);
-}
 
 
 if(isset($_POST['action'])){

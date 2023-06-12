@@ -154,7 +154,6 @@ include 'include/nav.php';
                 </div>
 
             </div>
-
             <div class="col-sm-12 mt-3">
                 <div class="form-group">
                 <select name="title_id" id="title_id" class="form-control">
