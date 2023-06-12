@@ -161,12 +161,12 @@
 
     <li class="nav-item">
       <a class="nav-link collapsed" data-bs-target="#jop-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-journal-text"></i><span>jops</span><i class="bi bi-chevron-down ms-auto"></i>
+        <i class="bi bi-journal-text"></i><span>job</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="jop-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>
           <a href="jop.php">
-            <i class="bi bi-circle"></i><span>jop</span>
+            <i class="bi bi-circle"></i><span>job</span>
           </a>
         </li>
 

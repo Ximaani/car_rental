@@ -81,6 +81,28 @@ function read_all_employe_name($conn){
     echo json_encode($data);
 }
 
+function get_top($conn){
+    $data = array();
+    $array_data = array();
+   $query ="SELECT u.id,concat(e.emp_first_name, ' ', e.emp_last_name) as employe_name,u.username,u.image,u.status,u.date  from users u JOIN employee e on u.emp_id=e.emp_id";
+    $result = $conn->query($query);
+
+
+    if($result){
+        while($row = $result->fetch_assoc()){
+            $array_data[] = $row;
+        }
+        $data = array("status" => true, "data" => $array_data);
+
+
+    }else{
+        $data = array("status" => false, "data"=> $conn->error);
+             
+    }
+
+    echo json_encode($data);
+}
+
 function get_user_list($conn){
     $data = array();
     $array_data = array();

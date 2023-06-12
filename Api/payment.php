@@ -30,7 +30,7 @@ function register_payment($conn){
 function read_all_payment($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT p.payment_id,concat(c.fristname, ' ', c.lastname) as customer_name,ca.car_name, r.taken_date,r.return_date, ca.rental_price as ret_per_day,p.amount as Total_amount,pm.method_name,ac.bank_name,p.date  from payment p JOIN customer c on p.customer_id=c.customer_id JOIN payment_method pm on p.payment_method_id=pm.payment_method_id JOIN account ac on p.account_id=ac.account_id JOIN rent r on p.customer_id=r.customer_id JOIN car ca on r.car_id=ca.car_id";
+   $query ="SELECT p.payment_id,concat(c.fristname, ' ', c.lastname) as customer_name,ca.car_name, r.taken_date,r.return_date, ca.rental_price as ret_per_day,p.amount as Total_amount,pm.method_name,ac.bank_name from payment p JOIN customer c on p.customer_id=c.customer_id JOIN payment_method pm on p.payment_method_id=pm.payment_method_id JOIN account ac on p.account_id=ac.account_id JOIN rent r on p.customer_id=r.customer_id JOIN car ca on r.car_id=ca.car_id";
     $result = $conn->query($query);
 
 

@@ -351,25 +351,20 @@ function load_bill() {
       if (status) {
         response.forEach(res => {
           tr += "<tr>";
+
           th = "<tr>";
-          for (let r in res) {
+         
+          for(let r in res){
             th += `<th>${r}</th>`;
 
-            if (r == "status") {
-              if (res[r] == "Top") {
-                tr += `<td><span class="badge bg-success">${res[r]}</span></td>`;
-              } else {
-                tr += `<td><span class="badge bg-danger">${res[r]}</span></td>`;
-              }
-            } else {
-              tr += `<td>${res[r]}</td>`;
-            }
+         if(r == "amount"){
+          tr += `<td> $${res[r]}</td>`;
+   
+         }else{
+          tr += `<td>${res[r]}</td>`;
+         }
 
           }
-          th += "<td>Action</td></tr>";
-
-          tr += `<td> <a class="btn btn-info update_info"  update_id=${res['bill_id']}><i class="bi bi-pencil-square" style="color: #fff"></i></a>&nbsp;&nbsp <a class="btn btn-danger delete_info" delete_id =${res['bill_id']}><i class="bi bi-trash" style="color: #fff"></i></a> </td>`
-          tr += "</tr>"
 
         })
 

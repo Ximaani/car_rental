@@ -135,25 +135,24 @@ function loadinvoice() {
 
       if (status) {
         response.forEach(res => {
-          th = "<tr>";
-          for (let r in res) {
-            th += `<th>${r}</th>`;
-          }
-
-
-
-
-
           tr += "<tr>";
-          for (let r in res) {
+          th = "<tr>";
+          for(let r in res){
+            th += `<th>${r}</th>`;
 
-
-            tr += `<td>${res[r]}</td>`;
-
+         if(r == "rental_price"){
+          tr += `<td> $${res[r]}</td>`;
+   
+         }else{
+          tr += `<td>${res[r]}</td>`;
+         }
 
           }
+        //   th += "<td>Action</td></tr>";
 
-          tr += "</tr>"
+        //  tr += `<td> <button class="btn btn-info update_info btn-primary btn-sm"  update_id=${res['invoice_id']}><i class="fas fa-edit" style="color: #fff" ></i></button>
+        //  `
+          tr+= "</tr>"
 
         })
         $("#invoiceTable thead").append(th);

@@ -148,7 +148,7 @@ include 'include/nav.php';
             <div class="col-sm-12 mt-3">
               <div class="form-group">
                 <label for="">Year</label>
-                <select name="year" id="year" class="form-group">
+                <select name="year" id="year" class="form-control">
                 <?php
                   $start_year = 1900; // set the starting year
                   $current_year = date('Y'); // get the current year
