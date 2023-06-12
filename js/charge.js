@@ -221,25 +221,21 @@ function loadcharge() {
 
       if (status) {
         response.forEach(res => {
-          th = "<tr>";
-          for (let r in res) {
-            th += `<th>${r}</th>`;
-          }
-
-
-
-
-
           tr += "<tr>";
-          for (let r in res) {
 
+          th = "<tr>";
+         
+          for(let r in res){
+            th += `<th>${r}</th>`;
 
-            tr += `<td>${res[r]}</td>`;
-
+         if(r == "Amount"){
+          tr += `<td> $${res[r]}</td>`;
+   
+         }else{
+          tr += `<td>${res[r]}</td>`;
+         }
 
           }
-
-     
 
         })
         $("#chargeTable thead").append(th);

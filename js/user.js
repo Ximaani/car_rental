@@ -142,6 +142,67 @@ function loaddData() {
   })
 }
 
+function loadTop() {
+  $("#UserTable tr").html('');
+
+  let sendingData = {
+    "action": "get_top"
+  }
+
+  $.ajax({
+    method: "POST",
+    dataType: "JSON",
+    url: "Api/user.php",
+    data: sendingData,
+
+    success: function (data) {
+      let status = data.status;
+      let response = data.data;
+      let html = '';
+      let tr = '';
+      let th = '';
+
+      if (status) {
+        response.forEach(res => {
+
+          th = "<tr>";
+          for (let i in res) {
+            th += `<th>${i}</th>`;
+          }
+
+          th += "<th>Action</th></tr>";
+
+          tr += "<tr>";
+          for (let r in res) {
+
+            if (r == "image") {
+
+              tr += `<td><img style="width:50px; height:50px; border: 1px solid #e3ebe7;
+                     border-radius:50%; object-fit:cover;" src="aploads/${res[r]}"></td>`;
+
+            } else {
+              tr += `<td>${res[r]}</td>`;
+            }
+
+          }
+
+          tr += `<td> <a class="btn btn-info update_info"  update_id=${res['id']}><i class="bi bi-pencil-square" style="color: #fff"></i></a>&nbsp;&nbsp <a class="btn btn-danger delete_info" delete_id=${res['id']}><i class="bi bi-trash" style="color: #fff"></i></a> </td>`
+          tr += "</tr>"
+
+        })
+
+        $("#UserTable thead").append(th);
+        $("#UserTable tbody").append(tr);
+      }
+
+    },
+    error: function (data) {
+
+    }
+
+  })
+}
+
 
 function fetchuserinfo(id) {
 

@@ -124,29 +124,7 @@ function load_bill() {
       let th = '';
 
 
-      if (status) {
-        response.forEach(res => {
-          th = "<tr>";
-          for (let r in res) {
-            th += `<th>${r}</th>`;
-          }
-
-
-          tr += "<tr>";
-          for (let r in res) {
-
-
-            tr += `<td>${res[r]}</td>`;
-
-
-          }
-
-          tr += "</tr>"
-
-        })
-        $("#billTable thead").append(th);
-        $("#billTable tbody").append(tr);
-      }
+     
 
 
 

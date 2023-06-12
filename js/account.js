@@ -137,27 +137,24 @@ function loadaccount() {
 
       if (status) {
         response.forEach(res => {
+          tr += "<tr>";
           th = "<tr>";
-          for (let r in res) {
+          for(let r in res){
             th += `<th>${r}</th>`;
-          }
 
+         if(r == "balance"){
+          tr += `<td> $${res[r]}</td>`;
+   
+         }else{
+          tr += `<td>${res[r]}</td>`;
+         }
+
+          }
           th += "<td>Action</td></tr>";
 
-
-
-
-          tr += "<tr>";
-          for (let r in res) {
-
-
-            tr += `<td>${res[r]}</td>`;
-
-
-          }
-
-          tr += `<td> <a class="btn btn-info update_info"  update_id=${res['account_id']}><i class="bi bi-pencil-square" style="color: #fff"></i></a>&nbsp;&nbsp <a class="btn btn-danger delete_info" delete_id=${res['account_id']}><i class="bi bi-trash" style="color: #fff"></i></a> </td>`
-          tr += "</tr>"
+         tr += `<td> <button class="btn btn-info update_info btn-primary btn-sm"  update_id=${res['account_id']}><i class="fas fa-edit" style="color: #fff" ></i></button>
+         `
+          tr+= "</tr>"
 
         })
         $("#account_Table thead").append(th);
