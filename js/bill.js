@@ -123,16 +123,33 @@ function load_bill() {
       let tr = '';
       let th = '';
 
+      if (status) {
+        response.forEach(res => {
+          tr += "<tr>";
+          th = "<tr>";
+          for(let r in res){
+            th += `<th>${r}</th>`;
 
-     
+         if(r == "amount"){
+          tr += `<td> $${res[r]}</td>`;
+   
+         }else{
+          tr += `<td>${res[r]}</td>`;
+         }
 
+          }
+        //   th += "<td>Action</td></tr>";
 
+        //  tr += `<td> <button class="btn btn-info update_info btn-primary btn-sm"  update_id=${res['invoice_id']}><i class="fas fa-edit" style="color: #fff" ></i></button>
+        //  `
+          tr+= "</tr>"
 
+        })
+        $("#billTable thead").append(th);
+        $("#billTable tbody").append(tr);
+      }
 
     },
-    error: function (data) {
-
-    }
 
   })
 }

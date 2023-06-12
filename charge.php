@@ -139,7 +139,7 @@ include 'include/nav.php';
                 <div class="form-group">
                 <label for="">Month</label>
                 <select name="month" id="month" class="form-control">
-                  <option value="select month">select month</option>
+                  <option selected disabled value="select month">select month</option>
                 </select>
                 </div>
 

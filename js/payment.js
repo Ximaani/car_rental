@@ -1,4 +1,5 @@
 loadpayment();
+fill_account();
 fill_amount();
 fill_customer();
 fill_payment_method();
@@ -69,6 +70,46 @@ function fill_payment_method() {
         })
 
         $("#payment_method_id").append(html);
+
+
+      } else {
+        displaymssage("error", response);
+      }
+
+    },
+    error: function (data) {
+
+    }
+
+  })
+}
+
+function fill_account() {
+
+  let sendingData = {
+    "action": "read_all_account"
+  }
+
+  $.ajax({
+    method: "POST",
+    dataType: "JSON",
+    url: "Api/payment.php",
+    data: sendingData,
+
+    success: function (data) {
+      let status = data.status;
+      let response = data.data;
+      let html = '';
+      let tr = '';
+
+      if (status) {
+        response.forEach(res => {
+          html += `<option value="${res['account_id']}">${res['bank_name']}</option>`;
+
+
+        })
+
+        $("#account_id").append(html);
 
 
       } else {
