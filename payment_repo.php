@@ -41,7 +41,7 @@ include 'include/nav.php';
             <div class="card-header">
                 <h5>booking Table</h5>
                 <span class="d-block m-t-5"> <code></code>   </span>
-                <form id="bookinggform">
+                <form id="paymentiform">
 
                 <div class="row">
                     <div class="col-sm-4">
@@ -54,7 +54,7 @@ include 'include/nav.php';
                   
 
                     <div class="col-sm-5">
-                        <input type="text" name="booking_id" id="booking_id" class="form-control">
+                        <input type="text" name="payment_id" id="payment_id" class="form-control">
                     </div>
 
 
@@ -68,7 +68,7 @@ include 'include/nav.php';
                     <div class="table-responsive" id="printt_Area">
                     <img width="30%";  height="130px" src="inter.png" class="mb-3">
 
-                    <table class="table" id="bokingTable">
+                    <table class="table" id="paymentable">
                               <thead>
                               
                               </thead>

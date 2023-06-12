@@ -271,8 +271,8 @@
       </a>
       <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         <li>
-          <a href="patient_statement.php">
-            <i class="bi bi-circle"></i><span>patient_statement</span>
+          <a href="payment_repo.php">
+            <i class="bi bi-circle"></i><span>payment report</span>
           </a>
         </li>
         <li>

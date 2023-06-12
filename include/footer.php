@@ -46,6 +46,7 @@
   <script src="js/dash.js"></script>
   <script src="js/customer.js"></script>
   <script src="js/expense.js"></script>
+  <script src="js/payment_repo.js"></script>
 
 
 

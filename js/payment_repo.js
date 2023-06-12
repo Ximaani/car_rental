@@ -75,7 +75,7 @@ $("#exportstatement").on("click", function () {
 $("#paymentiform").on("submit", function (event) {
 
   event.preventDefault();
-  $("#paymenttTable tr").html("");
+  $("#paymentable tr").html("");
 
 
   let payment_id = $("#payment_id").val();
@@ -86,7 +86,7 @@ $("#paymentiform").on("submit", function (event) {
 
     "payment_id": payment_id,
 
-    "action": "read_alll_payment",
+    "action": "get_customer_pay",
 
   }
 
@@ -95,7 +95,7 @@ $("#paymentiform").on("submit", function (event) {
   $.ajax({
     method: "POST",
     dataType: "JSON",
-    url: "Api/payment.php",
+    url: "Api/payment_repo.php",
     data: sendingData,
     success: function (data) {
       let status = data.status;
@@ -134,8 +134,8 @@ $("#paymentiform").on("submit", function (event) {
 
         })
 
-        $("#paymenttTable thead").append(th);
-        $("#paymenttTable tbody").append(tr);
+        $("#paymentable thead").append(th);
+        $("#paymentable tbody").append(tr);
       }
 
     },
@@ -167,67 +167,6 @@ function displaymessage(type, message) {
   }
 }
 
-
-function loadData() {
-  $("#paymenttTable tbody").html('');
-
-  let sendingData = {
-    "action": "get_payment_info"
-  }
-
-  $.ajax({
-    method: "POST",
-    dataType: "JSON",
-    url: "Api/payment.php",
-    data: sendingData,
-
-    success: function (data) {
-      let status = data.status;
-      let response = data.data;
-      let html = '';
-      let tr = '';
-
-      if (status) {
-        response.forEach(res => {
-
-          th = "<tr>";
-          for (let r in res) {
-            th += `<th>${r}</th>`;
-          }
-
-          th += "</tr>";
-
-
-          tr += "<tr>";
-          for (let r in res) {
-
-            if (r == "status") {
-              if (res[r] == "paid") {
-                tr += `<td><span class="badge bg-success">${res[r]}</span></td>`;
-              } else {
-                tr += `<td><span class="badge bg-danger">${res[r]}</span></td>`;
-              }
-            } else {
-              tr += `<td>${res[r]}</td>`;
-            }
-
-          }
-
-          tr += "</tr>"
-
-        })
-
-        $("#paymenttTable thead").append(th);
-        $("#paymenttTable tbody").append(tr);
-      }
-
-    },
-    error: function (data) {
-
-    }
-
-  })
-}
 
 
 
