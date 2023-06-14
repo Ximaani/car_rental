@@ -68,7 +68,7 @@ include 'include/nav.php';
                     <div class="table-responsive" id="printt_Area">
                     <img width="30%";  height="130px" src="inter.png" class="mb-3">
 
-                    <table class="table" id="paymentable">
+                    <table class="table" id="paymen_repotable">
                               <thead>
                               
                               </thead>

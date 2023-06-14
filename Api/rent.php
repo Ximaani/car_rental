@@ -32,7 +32,7 @@ function register_rent($conn){
 function read_all_rent($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT r.rent_id, concat(c.fristname, ' ', c.lastname) as customer_name, ca.car_name,ca.rental_price as rental_per_day,r.taken_date,r.return_date,r.date from rent r JOIN customer c on r.customer_id=c.customer_id JOIN car ca on r.car_id=ca.car_id ";
+   $query ="SELECT r.rent_id, concat(c.fristname, ' ', c.lastname) as customer_name, ca.car_name,ca.rental_price as rental_per_day,r.taken_date,r.return_date,r.date,r.action from rent r JOIN customer c on r.customer_id=c.customer_id JOIN car ca on r.car_id=ca.car_id ";
     $result = $conn->query($query);
 
 

@@ -40,7 +40,7 @@ function get_user_transaction($conn)
 
     $data = array();
     $array_data = array();
-    $query = "SELECT * from expense";
+    $query = "SELECT e.id,e.amount,e.type,e.description,e.user_id,a.bank_name,e.date FROM expense e JOIN account a ON a.account_id=e.Account_id";
     $result = $conn->query($query);
 
     if ($result) {

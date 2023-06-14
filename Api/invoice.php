@@ -82,7 +82,7 @@ function read_rent_price($conn){
 function read_all_customers($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT c.customer_id,concat(c.fristname, ' ', c.lastname) as customer_name from rent r JOIN customer c on r.customer_id=c.customer_id";
+   $query ="SELECT c.customer_id,concat(c.fristname, ' ', c.lastname) as customer_name from rent r JOIN customer c on r.customer_id=c.customer_id WHERE r.action='pending'";
     $result = $conn->query($query);
 
 

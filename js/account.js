@@ -150,10 +150,8 @@ function loadaccount() {
          }
 
           }
-          th += "<td>Action</td></tr>";
-
-         tr += `<td> <button class="btn btn-info update_info btn-primary btn-sm"  update_id=${res['account_id']}><i class="fas fa-edit" style="color: #fff" ></i></button>
-         `
+          
+         
           tr+= "</tr>"
 
         })

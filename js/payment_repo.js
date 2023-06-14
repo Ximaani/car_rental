@@ -1,4 +1,4 @@
-$("#payment_id").attr("disabled", true);
+$("#payment_id").attrpaymen_repotable("disabled", true);
 
 $("#type").on("change", function () {
   if ($("#type").val() == 0) {
@@ -75,12 +75,10 @@ $("#exportstatement").on("click", function () {
 $("#paymentiform").on("submit", function (event) {
 
   event.preventDefault();
-  $("#paymentable tr").html("");
+  $("# tr").html("");
 
 
   let payment_id = $("#payment_id").val();
-
-
 
   let sendingData = {
 
@@ -134,8 +132,8 @@ $("#paymentiform").on("submit", function (event) {
 
         })
 
-        $("#paymentable thead").append(th);
-        $("#paymentable tbody").append(tr);
+        $("#paymen_repotable thead").append(th);
+        $("#paymen_repotable tbody").append(tr);
       }
 
     },

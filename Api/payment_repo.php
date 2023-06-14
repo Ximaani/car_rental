@@ -5,33 +5,6 @@ header("Content-type: application/json");
 include '../config/conn.php';
 //user statment
 
-function get_payment($conn)
-{
-    extract($_POST);
-    $arreydata = array();
-
-    $message = array();
-    // read all students in the database
-    $query = "CALL `order_repo`()";
-    // excute the query
-
-    $result = $conn->query($query);
-    // success or error
-    if ($result) {
-
-        while ($row = $result->fetch_assoc()) {
-
-            $data[] = $row;
-        }
-
-        $message = array("status" => true, "data" => $data);
-    } else {
-
-        $message = array("status" => false, "data" => $conn->error);
-    }
-
-    echo json_encode($message);
-}
 
 function get_customer_pay($conn)
 {
@@ -40,7 +13,7 @@ function get_customer_pay($conn)
     $data = array();
     $message = array();
     // read all students in the database
-    $query = "call pay_repo('', '$payment_id')";
+    $query = "call pay_repo('$payment_id')";
 
 
     // excute the query
