@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2023 at 03:56 PM
+-- Generation Time: Jun 14, 2023 at 09:30 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -200,9 +200,9 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`account_id`, `bank_name`, `holder_name`, `account_number`, `balance`, `date`) VALUES
-(1, 'Salaam Bank', 'Mohamed Abdullahi Omer', '1234567', '520', '2023-06-12 10:24:39'),
+(1, 'Salaam Bank', 'Mohamed Abdullahi Omer', '1234567', '520', '2023-06-14 14:29:43'),
 (2, 'dahabshiil', 'garaad xuseen', '12345', '600', '2023-06-12 18:53:19'),
-(3, 'Premmier Bank', 'Raashid moalim', '123459', '30380', '2023-06-13 09:47:10');
+(3, 'Premmier Bank', 'Raashid moalim', '123459', '27880', '2023-06-14 14:44:56');
 
 -- --------------------------------------------------------
 
@@ -229,7 +229,11 @@ INSERT INTO `bill` (`bill_id`, `emp_id`, `amount`, `user`, `date`) VALUES
 (4, 1, '800.00', 'ximaani', '2023-06-12 21:09:40'),
 (5, 4, '800.00', 'ximaani', '2023-06-13 09:18:18'),
 (6, 6, '180.00', 'ximaani', '2023-06-13 09:37:10'),
-(7, 7, '180.00', 'ximaani', '2023-06-13 09:37:17');
+(7, 7, '180.00', 'ximaani', '2023-06-13 09:37:17'),
+(8, 1, '800.00', 'ximaani', '2023-06-14 14:34:26'),
+(9, 2, '180.00', 'ximaani', '2023-06-14 14:34:36'),
+(10, 3, '180.00', 'ximaani', '2023-06-14 14:34:44'),
+(11, 4, '800.00', 'ximaani', '2023-06-14 14:34:54');
 
 --
 -- Triggers `bill`
@@ -329,13 +333,20 @@ INSERT INTO `charge` (`charge_id`, `emp_id`, `title_id`, `Amount`, `month_id`, `
 (5, 4, 2, '800', 1, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-13 09:18:18'),
 (11, 6, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-13 09:37:10'),
 (14, 7, 1, '180', 1, '2023', 'mmmm', 3, 'ximaani', 1, '2023-06-13 09:37:17'),
-(17, 2, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-12 21:00:00'),
-(18, 3, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-12 21:00:00'),
+(17, 2, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-14 14:34:36'),
+(18, 3, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-14 14:34:44'),
 (19, 5, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-12 21:00:00'),
 (20, 6, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-12 21:00:00'),
 (21, 7, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-12 21:00:00'),
-(22, 1, 2, '800', 2, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-12 21:00:00'),
-(23, 4, 2, '800', 2, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-12 21:00:00');
+(22, 1, 2, '800', 2, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-14 14:34:26'),
+(23, 4, 2, '800', 2, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-14 14:34:54'),
+(24, 2, 1, '180', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
+(25, 3, 1, '180', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
+(26, 5, 1, '180', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
+(27, 6, 1, '180', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
+(28, 7, 1, '180', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
+(29, 1, 2, '800', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
+(30, 4, 2, '800', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00');
 
 --
 -- Triggers `charge`
@@ -431,7 +442,9 @@ CREATE TABLE `expense` (
 
 INSERT INTO `expense` (`id`, `amount`, `type`, `description`, `user_id`, `Account_id`, `date`) VALUES
 (1, 100.00, 'Expense', 'mushaar', 'ximaani', 2, '2023-06-12 16:29:04'),
-(2, 500.00, 'Income', 'xayeesiin', 'ximaani', 2, '2023-06-12 18:53:19');
+(2, 500.00, 'Income', 'xayeesiin', 'ximaani', 2, '2023-06-12 18:53:19'),
+(3, 100.00, 'Income', 'kiro', 'ximaani', 1, '2023-06-14 14:29:06'),
+(4, 100.00, 'Expense', 'mushaar', 'ximaani', 1, '2023-06-14 14:29:43');
 
 --
 -- Triggers `expense`
@@ -474,9 +487,10 @@ CREATE TABLE `invoice` (
 --
 
 INSERT INTO `invoice` (`invoice_id`, `customer_id`, `car_id`, `rental_price`, `taken_date`, `return_date`, `total_amount`, `date`) VALUES
-('INV001', 1, 'hondia', '80', '2023-06-13', '2023-06-16', '0', '2023-06-13 09:11:35'),
-('INV002', 3, 'zuzuki', '50', '2023-06-19', '2023-06-21', '100', '2023-06-13 13:58:31'),
-('INV003', 5, 'barada', '180', '2023-06-14', '2023-06-17', '540', '2023-06-14 07:41:11');
+('INV001', 1, 'hondia', '80', '2023-06-14', '2023-06-16', '160', '2023-06-14 14:24:26'),
+('INV002', 3, 'zuzuki', '50', '2023-06-14', '2023-06-17', '150', '2023-06-14 14:24:43'),
+('INV003', 4, 'barada', '180', '2023-06-14', '2023-06-18', '720', '2023-06-14 14:27:20'),
+('INV004', 5, 'marshedis', '60', '2023-06-14', '2023-06-19', '300', '2023-06-14 19:24:08');
 
 --
 -- Triggers `invoice`
@@ -578,14 +592,24 @@ CREATE TABLE `payment` (
 --
 
 INSERT INTO `payment` (`payment_id`, `customer_id`, `amount`, `payment_method_id`, `account_id`, `date`) VALUES
-(1, 1, '240.00', 6, 1, '2023-06-13 09:11:35'),
-(2, 1, '0.00', 6, 1, '2023-06-13 09:12:27'),
-(3, 0, '0.00', 1, 1, '2023-06-13 09:12:31'),
-(4, 0, '0.00', 1, 1, '2023-06-13 09:12:33'),
-(5, 1, '0.00', 1, 1, '2023-06-13 09:12:44'),
-(6, 1, '0.00', 1, 1, '2023-06-13 09:12:51'),
-(7, 1, '0.00', 1, 1, '2023-06-13 09:12:57'),
-(8, 1, '0.00', 1, 1, '2023-06-13 13:42:38');
+(1, 1, '160.00', 6, 1, '2023-06-14 14:25:37'),
+(2, 3, '150.00', 1, 1, '2023-06-14 14:26:08'),
+(3, 4, '720.00', 6, 1, '2023-06-14 14:27:56'),
+(4, 5, '300.00', 1, 1, '2023-06-14 19:24:31');
+
+--
+-- Triggers `payment`
+--
+DELIMITER $$
+CREATE TRIGGER `update_rent_paid_active` BEFORE INSERT ON `payment` FOR EACH ROW BEGIN
+
+update rent set action ='Paid'
+WHERE customer_id=new.customer_id;
+
+
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -628,9 +652,10 @@ CREATE TABLE `rent` (
 --
 
 INSERT INTO `rent` (`rent_id`, `customer_id`, `car_id`, `taken_date`, `return_date`, `action`, `date`) VALUES
-(1, 1, 1, '2023-06-13', '2023-06-16', 'Invoiced', '2023-06-13 09:09:13'),
-(2, 3, 2, '2023-06-19', '2023-06-21', 'Invoiced', '2023-06-13 13:58:31'),
-(3, 5, 4, '2023-06-14', '2023-06-17', 'Invoiced', '2023-06-14 07:41:11');
+(1, 1, 1, '2023-06-14', '2023-06-16', 'Paid', '2023-06-14 14:25:37'),
+(2, 3, 2, '2023-06-14', '2023-06-17', 'Paid', '2023-06-14 14:26:08'),
+(3, 4, 4, '2023-06-14', '2023-06-18', 'Paid', '2023-06-14 14:27:56'),
+(4, 5, 5, '2023-06-14', '2023-06-19', 'Paid', '2023-06-14 19:24:31');
 
 -- --------------------------------------------------------
 
@@ -835,7 +860,7 @@ ALTER TABLE `account`
 -- AUTO_INCREMENT for table `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `branch`
@@ -853,7 +878,7 @@ ALTER TABLE `car`
 -- AUTO_INCREMENT for table `charge`
 --
 ALTER TABLE `charge`
-  MODIFY `charge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `charge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -871,7 +896,7 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `expense`
 --
 ALTER TABLE `expense`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `jop_title`
@@ -895,7 +920,7 @@ ALTER TABLE `month`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `payment_method`
@@ -907,7 +932,7 @@ ALTER TABLE `payment_method`
 -- AUTO_INCREMENT for table `rent`
 --
 ALTER TABLE `rent`
-  MODIFY `rent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `rent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `transmission`
