@@ -139,7 +139,7 @@ include 'include/nav.php';
             <div class="col-sm-6">
                 <div class="form-group">
                 <label for="">car_name</label>
-                <input type="text" name="cars_id" id="cars_id" class="form-control" readonly>
+                <input type="text" name="cars_id" id="cars_id" class="form-control" readonly >
                 </div>
 
             </div>

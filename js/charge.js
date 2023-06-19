@@ -219,28 +219,34 @@ function loadcharge() {
       let tr = '';
       let th = '';
 
-      if (status) {
-        response.forEach(res => {
-          tr += "<tr>";
+      if(status){
+        response.forEach(res=>{
+            tr += "<tr>";
+            th = "<tr>";
+            for(let r in res){
+              th += `<th>${r}</th>`;
 
-          th = "<tr>";
-         
-          for(let r in res){
-            th += `<th>${r}</th>`;
+           if(r == "active"){
+            if(res[r] == "Charged"){
+              tr += `<td><span class="badge bg-info text-white">${res[r]}</span></td>`;
+            }else{
+              tr += `<td><span class="badge bg-success text-white">${res[r]}</span></td>`;
+            }
+           }else{
+            tr += `<td>${res[r]}</td>`;
+           }
 
-         if(r == "Amount"){
-          tr += `<td> $${res[r]}</td>`;
-   
-         }else{
-          tr += `<td>${res[r]}</td>`;
-         }
+            }
+            // th += "<td>Action</td></tr>";
 
-          }
-
+            //tr += `<td> <a class="btn btn-info update_info"  update_id=${res['charge_id']}><i class="bi bi-pencil-square" style="color: #fff"></i></a>&nbsp;&nbsp <a class="btn btn-danger delete_info" delete_id=${res['charge_id']}><i class="bi bi-trash" style="color: #fff"></i></a> </td>`
+            tr+= "</tr>"
+          
         })
+
         $("#chargeTable thead").append(th);
         $("#chargeTable tbody").append(tr);
-      }
+    }
 
     },
     error: function (data) {

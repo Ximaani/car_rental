@@ -6,14 +6,14 @@ include '../config/conn.php';
 //user statment
 
 
-function get_customer_pay($conn)
+function get_payment_pay($conn)
 {
     extract($_POST);
 
     $data = array();
     $message = array();
     // read all students in the database
-    $query = "call pay_repo('$payment_id')";
+    $query = "call payment_repo('$tellphone')";
 
 
     // excute the query

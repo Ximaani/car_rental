@@ -33,7 +33,7 @@ function read_all_employeeee($conn){
     $data = array();
     $array_data = array();
    $query ="SELECT Distinct e.emp_id,concat(e.emp_first_name, ' ', e.emp_last_name) as employename FROM charge ch JOIN employee e on ch.emp_id=e.emp_id
-   WHERE ch.active=0";
+   WHERE ch.active='Charged'";
     $result = $conn->query($query);
 
 
@@ -82,7 +82,7 @@ function fill_amount_bill($conn){
 function read_all_bill($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT concat(e.emp_first_name, ' ', e.emp_last_name) as employename,e.phone,b.amount,b.user, b.date  from bill b join employee e on b.emp_id = e.emp_id";
+   $query ="SELECT concat(e.emp_first_name, ' ', e.emp_last_name) as employename,b.amount,b.user, b.date  from bill b join employee e on b.emp_id = e.emp_id";
     $result = $conn->query($query);
 
 

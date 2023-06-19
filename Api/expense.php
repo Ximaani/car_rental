@@ -3,7 +3,7 @@ session_start();
 header("Content-type: application/json");
 include '../config/conn.php';
 // $action = $_POST['action'];
-function register_expense($conn)
+function register_expense($conn){
 
 
     extract($_POST);

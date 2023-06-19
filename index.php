@@ -206,43 +206,81 @@ include 'include/sidebar.php';
           </div><!-- End Reports -->
 
           <!-- Recent Sales -->
-          <div class="col-12">
-            <div class="card recent-sales overflow-auto">
+         <div class="row">
+          <div class="col-sm-5">
+          <div class="card recent-sales overflow-auto">
 
-              <div class="filter">
-                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                  <li class="dropdown-header text-start">
-                    <h6>Filter</h6>
-                  </li>
+<div class="filter">
+  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+    <li class="dropdown-header text-start">
+      <h6>Filter</h6>
+    </li>
 
-                  <li><a class="dropdown-item" href="#">Today</a></li>
-                  <li><a class="dropdown-item" href="#">This Month</a></li>
-                  <li><a class="dropdown-item" href="#">This Year</a></li>
-                </ul>
-              </div>
+  </ul>
+</div>
 
-              <div class="card-body">
-                <h5 class="card-title">Top customers <span>| Today</span></h5>
+<div class="card-body">
+  <h5 class="card-title">Top customers payment <span>| Today</span></h5>
 
-                <table class="table" id="topcustomers">
+  <table class="table" id="top_payment">
 
-                  <thead>
+    <thead>
 
 
 
-                  </thead>
+    </thead>
 
-                  <tbody>
+    <tbody>
 
 
-                  </tbody>
-                </table>
+    </tbody>
+  </table>
 
-              </div>
+</div>
 
-            </div>
-          </div><!-- End Recent Sales -->
+</div>
+          </div>
+
+          <div class="col-sm-5">
+          <div class="card recent-sales overflow-auto">
+
+<div class="filter">
+  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+    <li class="dropdown-header text-start">
+      <h6>Filter</h6>
+    </li>
+
+  </ul>
+</div>
+
+<div class="card-body">
+  <h5 class="card-title">Top Rent car <span>| Today</span></h5>
+
+  <table class="table" id="top_payment">
+
+    <thead>
+
+
+
+    </thead>
+
+    <tbody>
+
+
+    </tbody>
+  </table>
+
+</div>
+
+</div>
+          </div>
+         </div>
+
+
+         
+         <!-- End Recent Sales -->
 
           <!-- Top Selling -->
           <!-- End Top Selling -->

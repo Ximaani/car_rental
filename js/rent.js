@@ -168,34 +168,34 @@ function loadrent() {
       let tr = '';
       let th = '';
 
-      if (status) {
-        response.forEach(res => {
-          th = "<tr>";
-          for (let r in res) {
-            th += `<th>${r}</th>`;
-          }
+      if(status){
+        response.forEach(res=>{
+            tr += "<tr>";
+            th = "<tr>";
+            for(let r in res){
+              th += `<th>${r}</th>`;
 
-          th += "<td>Action</td></tr>";
-
-
-
-
-          tr += "<tr>";
-          for (let r in res) {
-
-
+           if(r == "action"){
+            if(res[r] == "pending"){
+              tr += `<td><span class="badge bg-danger text-white ">${res[r]}</span></td>`;
+            }else{
+              tr += `<td><span class="badge bg-info text-white">${res[r]}</span></td>`;
+            }
+           }else{
             tr += `<td>${res[r]}</td>`;
+           }
 
+            }
+            th += "<td>Action</td></tr>";
 
-          }
-
-          tr += `<td> <a class="btn btn-info update_info"  update_id=${res['rent_id']}><i class="bi bi-pencil-square" style="color: #fff"></i></a>&nbsp;&nbsp <a class="btn btn-danger delete_info" delete_id=${res['rent_id']}><i class="bi bi-trash" style="color: #fff"></i></a> </td>`
-          tr += "</tr>"
-
+            tr += `<td> <a class="btn btn-info update_info"  update_id=${res['rent_id']}><i class="bi bi-pencil-square" style="color: #fff"></i></a>&nbsp;&nbsp <a class="btn btn-danger delete_info" delete_id=${res['rent_id']}><i class="bi bi-trash" style="color: #fff"></i></a> </td>`
+            tr+= "</tr>"
+          
         })
+
         $("#rentTable thead").append(th);
         $("#rentTable tbody").append(tr);
-      }
+    }
 
     },
     error: function (data) {

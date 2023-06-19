@@ -40,13 +40,17 @@
   <script src="js/jop.js"></script>
   <script src="js/account.js"></script>
   <script src="js/payment.js"></script>
-  <script src="js/car.js"></script>
+  <!-- <script src="js/car.js"></script> -->
   <script src="js/branch.js"></script>
   <script src="js/login.js"></script>
   <script src="js/dash.js"></script>
   <script src="js/customer.js"></script>
   <script src="js/expense.js"></script>
   <script src="js/payment_repo.js"></script>
+  <script src="js/rent_repo.js"></script>
+  <script src="js/charge_repo.js"></script>
+  <script src="js/bill_repo.js"></script>
+  <script src="js/invoice_repo.js"></script>
 
 
 

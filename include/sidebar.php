@@ -40,6 +40,20 @@
     </li>
 
     <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#charge-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-menu-button-wide"></i><span>charge</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="charge-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+        <li>
+          <a href="charge.php">
+            <i class="bi bi-circle"></i><span>charge</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="nav-item">
       <a class="nav-link collapsed" data-bs-target="#rent-nav" data-bs-toggle="collapse" href="#">
         <i class="bi bi-journal-text"></i><span>rent</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
@@ -92,51 +106,6 @@
             <i class="bi bi-circle"></i><span>Employee</span>
           </a>
         </li>
-
-      </ul>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#charge-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-menu-button-wide"></i><span>charge</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="charge-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-
-        <li>
-          <a href="charge.php">
-            <i class="bi bi-circle"></i><span>charge</span>
-          </a>
-        </li>
-
-
-        <!-- <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#bill-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-menu-button-wide"></i><span>bill</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="bill-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-
-        <li>
-          <a href="bill.php">
-            <i class="bi bi-circle"></i><span>bill</span>
-          </a>
-        </li> -->
-
-
-        <!-- <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#payment-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-menu-button-wide"></i><span>payment</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="payment-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-
-        <li>
-          <a href="payment.php">
-            <i class="bi bi-circle"></i><span>payment</span>
-          </a>
-        </li> -->
-
-
-
-
 
       </ul>
     </li>
@@ -276,27 +245,27 @@
           </a>
         </li>
         <li>
-          <a href="booking_statement.php">
-            <i class="bi bi-circle"></i><span>booking_statement</span>
+          <a href="rent_repo.php">
+            <i class="bi bi-circle"></i><span>rent_report</span>
           </a>
         </li>
 
 
         <li>
-          <a href="payment__statement.php">
-            <i class="bi bi-circle"></i><span>payment_statement</span>
+          <a href="charge_repo.php">
+            <i class="bi bi-circle"></i><span>Charge Report</span>
           </a>
         </li>
 
         <li>
-          <a href="ALL_patient_pending.php">
-            <i class="bi bi-circle"></i><span>patient_pending_statement</span>
+          <a href="bill_repo.php">
+            <i class="bi bi-circle"></i><span>Bill Report</span>
           </a>
         </li>
 
         <li>
-          <a href="apointment_statement.php">
-            <i class="bi bi-circle"></i><span>Apointment_statement</span>
+          <a href="invoice_repo.php">
+            <i class="bi bi-circle"></i><span>Invoice Report </span>
           </a>
         </li>
 

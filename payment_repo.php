@@ -54,7 +54,7 @@ include 'include/nav.php';
                   
 
                     <div class="col-sm-5">
-                        <input type="text" name="payment_id" id="payment_id" class="form-control">
+                        <input type="text" name="tellphone" id="tellphone" class="form-control">
                     </div>
 
 
@@ -65,8 +65,8 @@ include 'include/nav.php';
                 </form>
 
                 <div class="row">
-                    <div class="table-responsive" id="printt_Area">
-                    <img width="30%";  height="130px" src="inter.png" class="mb-3">
+                    <div class="table-responsive" id="print_area">
+                    <img width="30%";  height="130px" src="money.jpg" class="mb-3">
 
                     <table class="table" id="paymen_repotable">
                               <thead>
@@ -81,8 +81,8 @@ include 'include/nav.php';
 
                     </div>
                     <div class="col-sm-4">
-                    <button id="printt_statement" class="btn btn-success ml-1"><i class="fa fa-print"></i>print</button>
-                    <button id="exportt_statement" class="btn btn-info mr-4"><i class="fa fa-file"></i>Export</button>
+                    <button id="printstatement" class="btn btn-success ml-1"><i class="fa fa-print"></i>print</button>
+                    <button id="exportstatement" class="btn btn-info mr-4"><i class="fa fa-file"></i>Export</button>
                     </div>
                 </div>
 </div>
@@ -114,3 +114,4 @@ include 'include/nav.php';
 include 'include/footer.php';
 
 ?>
+  

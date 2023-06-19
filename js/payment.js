@@ -1,4 +1,5 @@
 loadpayment();
+loadtoppayment();
 fill_account();
 fill_amount();
 fill_customer();
@@ -243,6 +244,63 @@ function loadpayment() {
 
   })
 }
+
+function loadtoppayment() {
+  $("#top_payment tbody").html('');
+  $("#top_payment thead").html('');
+
+  let sendingData = {
+    "action": "read_all_top_payment"
+  }
+
+  $.ajax({
+    method: "POST",
+    dataType: "JSON",
+    url: "Api/payment.php",
+    data: sendingData,
+
+    success: function (data) {
+      let status = data.status;
+      let response = data.data;
+      let html = '';
+      let tr = '';
+      let th = '';
+
+      if (status) {
+        response.forEach(res => {
+          th = "<tr>";
+          for (let r in res) {
+            th += `<th>${r}</th>`;
+          }
+
+
+
+
+
+          tr += "<tr>";
+          for (let r in res) {
+
+
+            tr += `<td>${res[r]}</td>`;
+
+
+          }
+
+          tr += "</tr>"
+
+        })
+        $("#top_payment thead").append(th);
+        $("#top_payment tbody").append(tr);
+      }
+
+    },
+    error: function (data) {
+
+    }
+
+  })
+}
+
 
 $("#Customer_id").on("change", function(){
  if($("#Customer_id").val()== 0){

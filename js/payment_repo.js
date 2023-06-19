@@ -1,11 +1,13 @@
-$("#payment_id").attrpaymen_repotable("disabled", true);
+// alert("ssuccessfully");
+
+$("#tellphone").attr("disabled", true);
 
 $("#type").on("change", function () {
   if ($("#type").val() == 0) {
-    $("#payment_id").attr("disabled", true);
+    $("#tellphone").attr("disabled", true);
 
   } else {
-    $("#payment_id").attr("disabled", false);
+    $("#tellphone").attr("disabled", false);
   }
 })
 
@@ -75,16 +77,16 @@ $("#exportstatement").on("click", function () {
 $("#paymentiform").on("submit", function (event) {
 
   event.preventDefault();
-  $("# tr").html("");
+  $("#paymen_repotable tr").html("");
 
 
-  let payment_id = $("#payment_id").val();
+  let tellphone = $("#tellphone").val();
 
   let sendingData = {
 
-    "payment_id": payment_id,
+    "tellphone": tellphone,
 
-    "action": "get_customer_pay",
+    "action": "get_payment_pay",
 
   }
 
@@ -104,34 +106,27 @@ $("#paymentiform").on("submit", function (event) {
 
       if (status) {
         response.forEach(res => {
-
           th = "<tr>";
           for (let r in res) {
             th += `<th>${r}</th>`;
           }
 
-          th += "</tr>";
+
+
 
 
           tr += "<tr>";
           for (let r in res) {
 
-            if (r == "status") {
-              if (res[r] == "paid") {
-                tr += `<td><span class="badge bg-success">${res[r]}</span></td>`;
-              } else {
-                tr += `<td><span class="badge bg-danger">${res[r]}</span></td>`;
-              }
-            } else {
-              tr += `<td>${res[r]}</td>`;
-            }
+
+            tr += `<td>${res[r]}</td>`;
+
 
           }
 
           tr += "</tr>"
 
         })
-
         $("#paymen_repotable thead").append(th);
         $("#paymen_repotable tbody").append(tr);
       }
@@ -145,25 +140,7 @@ $("#paymentiform").on("submit", function (event) {
 
 })
 
-function displaymessage(type, message) {
-  let success = document.querySelector(".alert-success");
-  let error = document.querySelector(".alert-danger");
-  if (type == "success") {
-    error.classList = "alert alert-danger d-none";
-    success.classList = "alert alert-success";
-    success.innerHTML = message;
 
-    setTimeout(function () {
-      //   $("#expensemodal").modal("hide");
-      success.classList = "alert alert-success d-none";
-      $("#paymentiform")[0].reset();
-
-    }, 3000);
-  } else {
-    error.classList = "alert alert-danger";
-    error.innerHTML = message;
-  }
-}
 
 
 
