@@ -1,6 +1,4 @@
-<?php
-   session_start();
-      ?>
+
 
 <header id="header" class="header fixed-top d-flex align-items-center">
 

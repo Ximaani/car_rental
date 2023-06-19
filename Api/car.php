@@ -1,23 +1,24 @@
+
 <?php
+
 header("content-type: application/json");
-include '../config/conn.php';
+include '..//config/conn.php';
 // $action = $_POST['action'];
 
-function register_rent($conn){
+
+function register_car($conn){
     extract($_POST);
     $data = array();
-    $query = "insert into rent (customer_id, car_id,taken_date, return_date)
-    values('$customer_id','$car_id','$taken_date','$return_date')";
+    $query = "INSERT INTO car (car_name, car_number, modal_id, transmission_id,type_fuel_id,rental_price,conditions_id,quantity)
+     values('$car_names', '$car_number', '$modal_id', '$transmission_id','$type_fuel_id', '$rental_price', '$conditions', '$quantity')";
 
     $result = $conn->query($query);
 
 
     if($result){
 
-      //  $row= $result->fetch_assoc();
-
-            $data = array("status" => true, "data" => "Registered succesfully 😂😊😒😎");
-        
+       
+            $data = array("status" => true, "data" => "successfully Registered 😂😊😒😎");
 
 
     }else{
@@ -28,11 +29,54 @@ function register_rent($conn){
     echo json_encode($data);
 }
 
-
-function read_all_rent($conn){
+function read_all_modal($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT concat(c.fristname, ' ', c.lastname) as customer_name, ca.car_name,ca.rental_price as rental_per_day,r.taken_date,r.return_date,r.date,r.action from rent r JOIN customer c on r.customer_id=c.customer_id JOIN car ca on r.car_id=ca.car_id ";
+   $query ="select * from modal";
+    $result = $conn->query($query);
+
+
+    if($result){
+        while($row = $result->fetch_assoc()){
+            $array_data[] = $row;
+        }
+        $data = array("status" => true, "data" => $array_data);
+
+
+    }else{
+        $data = array("status" => false, "data"=> $conn->error);
+             
+    }
+
+    echo json_encode($data);
+}
+
+function read_all_transmission($conn){
+    $data = array();
+    $array_data = array();
+   $query ="select * from transmission";
+    $result = $conn->query($query);
+
+
+    if($result){
+        while($row = $result->fetch_assoc()){
+            $array_data[] = $row;
+        }
+        $data = array("status" => true, "data" => $array_data);
+
+
+    }else{
+        $data = array("status" => false, "data"=> $conn->error);
+             
+    }
+
+    echo json_encode($data);
+}
+
+function read_all_condition($conn){
+    $data = array();
+    $array_data = array();
+   $query ="select * from conditions";
     $result = $conn->query($query);
 
 
@@ -54,7 +98,7 @@ function read_all_rent($conn){
 function read_all_car($conn){
     $data = array();
     $array_data = array();
-   $query ="select * from car";
+   $query ="SELECT c.car_name,c.car_number,m.modal_name,t.transmission_name as Trans_name,tf.fuel_name,c.rental_price as rent_per_day,co.conditions_name,c.quantity,c.data from car c join modal m on c.modal_id=m.modal_id JOIN transmission t on c.transmission_id=t.transmission_id JOIN typefuel tf on c.type_fuel_id=tf.type_fuel_id JOIN conditions co ON c.conditions_id=co.conditions_id";
     $result = $conn->query($query);
 
 
@@ -73,10 +117,10 @@ function read_all_car($conn){
     echo json_encode($data);
 }
 
-function read_all_customer_name($conn){
+function read_all_type_fuel($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT c.customer_id, concat(c.fristname, ' ', c.lastname) as customer_name  from rent r JOIN customer c on r.customer_id=c.customer_id";
+   $query ="SELECT * FROM typefuel";
     $result = $conn->query($query);
 
 
@@ -96,11 +140,12 @@ function read_all_customer_name($conn){
 }
 
 
-function get_rent_info($conn){
+
+function get_car_info($conn){
     extract($_POST);
     $data = array();
     $array_data = array();
-   $query ="SELECT * FROM rent where rent_id= '$rent_id'";
+   $query ="SELECT *FROM car where car_id= '$car_id'";
     $result = $conn->query($query);
 
 
@@ -118,13 +163,13 @@ function get_rent_info($conn){
     echo json_encode($data);
 }
 
-
-function update_rent($conn){
+function update_car($conn){
     extract($_POST);
 
     $data = array();
 
-    $query = "UPDATE rent set customer_id = '$customer_id', car_id = '$car_id', taken_date = '$taken_date', return_date = '$return_date'  WHERE rent_id= '$rent_id'";
+    $query = "UPDATE car set car_names = '$car_names', car_number = '$car_number', modal_id = '$modal_id', transmission_id = '$transmission_id', type_fuel_id = '$type_fuel_id', rental_price = '$rental_price', conditions = '$conditions', quantity = '$quantity' WHERE car_id = '$car_id'";
+     
 
     $result = $conn->query($query);
 
@@ -142,11 +187,11 @@ function update_rent($conn){
     echo json_encode($data);
 }
 
-function Delete_rent($conn){
+function Delete_car($conn){
     extract($_POST);
     $data = array();
     $array_data = array();
-   $query ="DELETE FROM rent where rent_id= '$rent_id'";
+   $query ="DELETE FROM car where car_id= '$car_id'";
     $result = $conn->query($query);
 
 
@@ -171,6 +216,7 @@ if(isset($_POST['action'])){
 }else{
     echo json_encode(array("status" => false, "data"=> "Action Required....."));
 }
+
 
 
 ?>

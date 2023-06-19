@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2023 at 03:47 PM
+-- Generation Time: Jun 19, 2023 at 07:43 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -245,7 +245,7 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`account_id`, `bank_name`, `holder_name`, `account_number`, `balance`, `date`) VALUES
-(1, 'Salaam Bank', 'Mohamed Abdullahi Omer', '1234567', '770', '2023-06-19 13:41:32'),
+(1, 'Salaam Bank', 'Mohamed Abdullahi Omer', '1234567', '836', '2023-06-19 14:06:11'),
 (2, 'dahabshiil', 'garaad xuseen', '12345', '600', '2023-06-12 18:53:19'),
 (3, 'Premmier Bank', 'Raashid moalim', '123459', '19880', '2023-06-18 11:00:58');
 
@@ -326,6 +326,8 @@ CREATE TABLE `car` (
   `transmission_id` int(11) NOT NULL,
   `type_fuel_id` int(11) NOT NULL,
   `rental_price` float NOT NULL,
+  `conditions_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `data` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -333,17 +335,8 @@ CREATE TABLE `car` (
 -- Dumping data for table `car`
 --
 
-INSERT INTO `car` (`car_id`, `car_name`, `car_number`, `modal_id`, `transmission_id`, `type_fuel_id`, `rental_price`, `data`) VALUES
-(1, 'hondia', 'A1234', 3, 2, 3, 80, '2023-06-16 06:50:34'),
-(2, 'zuzuki', 'D123', 2, 2, 4, 50, '2023-06-16 06:51:20'),
-(4, 'barada', 'B1234', 2, 1, 3, 180, '2023-06-16 06:50:50'),
-(5, 'marshedis', 'C1213', 6, 1, 3, 60, '2023-06-16 06:51:05'),
-(6, '', 'a78788', 1, 1, 3, 99, '2023-06-19 13:24:18'),
-(7, '', 'a78788', 1, 1, 3, 99, '2023-06-19 13:24:36'),
-(8, '', '14fgsg', 2, 1, 3, 77, '2023-06-19 13:26:01'),
-(9, '', '14fgsg', 2, 1, 3, 77, '2023-06-19 13:26:13'),
-(10, '', 'av123', 2, 1, 4, 77, '2023-06-19 13:28:31'),
-(11, '', 'av123', 2, 1, 4, 77, '2023-06-19 13:28:41');
+INSERT INTO `car` (`car_id`, `car_name`, `car_number`, `modal_id`, `transmission_id`, `type_fuel_id`, `rental_price`, `conditions_id`, `quantity`, `data`) VALUES
+(1, 'number geni', 'A112', 2, 1, 3, 120, 1, 5, '2023-06-19 17:25:44');
 
 -- --------------------------------------------------------
 
@@ -398,6 +391,25 @@ account_id=new.account_id;
 END
 $$
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `conditions`
+--
+
+CREATE TABLE `conditions` (
+  `conditions_id` int(11) NOT NULL,
+  `conditions_name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `conditions`
+--
+
+INSERT INTO `conditions` (`conditions_id`, `conditions_name`) VALUES
+(1, 'Brand_new'),
+(2, 'Used');
 
 -- --------------------------------------------------------
 
@@ -487,7 +499,8 @@ INSERT INTO `expense` (`id`, `amount`, `type`, `description`, `user_id`, `Accoun
 (4, 100.00, 'Expense', 'mushaar', 'ximaani', 1, '2023-06-14 14:29:43'),
 (5, 100.00, 'Income', 'adverticement', 'ximaani', 1, '2023-06-16 06:45:02'),
 (6, 100.00, 'Income', 'share', 'misbil', 1, '2023-06-18 10:56:43'),
-(7, 50.00, 'Income', 'mmm', 'ximaani', 1, '2023-06-19 13:41:32');
+(7, 50.00, 'Income', 'mmm', 'ximaani', 1, '2023-06-19 13:41:32'),
+(8, 66.00, 'Income', 'mudss', 'ximaani', 1, '2023-06-19 14:06:11');
 
 --
 -- Triggers `expense`
@@ -808,7 +821,8 @@ ALTER TABLE `car`
   ADD PRIMARY KEY (`car_id`),
   ADD KEY `modal_id` (`modal_id`),
   ADD KEY `transmission_id` (`transmission_id`),
-  ADD KEY `type_fuel_id` (`type_fuel_id`);
+  ADD KEY `type_fuel_id` (`type_fuel_id`),
+  ADD KEY `conditions_id` (`conditions_id`);
 
 --
 -- Indexes for table `charge`
@@ -816,6 +830,12 @@ ALTER TABLE `car`
 ALTER TABLE `charge`
   ADD PRIMARY KEY (`charge_id`),
   ADD UNIQUE KEY `emp_id` (`emp_id`,`month_id`);
+
+--
+-- Indexes for table `conditions`
+--
+ALTER TABLE `conditions`
+  ADD PRIMARY KEY (`conditions_id`);
 
 --
 -- Indexes for table `customer`
@@ -929,13 +949,19 @@ ALTER TABLE `branch`
 -- AUTO_INCREMENT for table `car`
 --
 ALTER TABLE `car`
-  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `charge`
 --
 ALTER TABLE `charge`
   MODIFY `charge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `conditions`
+--
+ALTER TABLE `conditions`
+  MODIFY `conditions_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -953,7 +979,7 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `expense`
 --
 ALTER TABLE `expense`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `jop_title`
@@ -1013,7 +1039,8 @@ ALTER TABLE `typefuel`
 ALTER TABLE `car`
   ADD CONSTRAINT `car_ibfk_1` FOREIGN KEY (`modal_id`) REFERENCES `modal` (`modal_id`),
   ADD CONSTRAINT `car_ibfk_2` FOREIGN KEY (`transmission_id`) REFERENCES `transmission` (`transmission_id`),
-  ADD CONSTRAINT `car_ibfk_3` FOREIGN KEY (`type_fuel_id`) REFERENCES `typefuel` (`type_fuel_id`);
+  ADD CONSTRAINT `car_ibfk_3` FOREIGN KEY (`type_fuel_id`) REFERENCES `typefuel` (`type_fuel_id`),
+  ADD CONSTRAINT `car_ibfk_4` FOREIGN KEY (`conditions_id`) REFERENCES `conditions` (`conditions_id`);
 
 --
 -- Constraints for table `employee`
