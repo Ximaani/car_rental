@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2023 at 09:30 PM
+-- Generation Time: Jun 19, 2023 at 03:47 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -28,8 +28,14 @@ DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `amount_pl` (IN `_emp_id` INT)   BEGIN
 
 SELECT sum(Amount) as salary FROM charge WHERE emp_id=_emp_id
-and active=0;
+and active='Charged';
 
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `fff` ()   BEGIN
+
+SELECT concat(cu.fristname,' ',cu.lastname) AS customer_name,c.car_name, r.taken_date,r.return_date FROM rent r JOIN customer cu ON r.customer_id=cu.customer_id JOIN car c on r.car_id=c.car_id;
 
 END$$
 
@@ -52,6 +58,14 @@ SELECT "Not" as msg;
 END IF;
 END IF;
  
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `invoice_report` (IN `_car_name` VARCHAR(100))   BEGIN
+if(_car_name = ' ')THEN
+SELECT concat(cu.fristname,' ', cu.lastname) AS Customer_Name,c.car_name, i.rental_price AS Rent_Per_Day,i.taken_date,i.return_date,i.total_amount  FROM invoice i JOIN customer cu ON i.customer_id=cu.customer_id JOIN rent r on cu.customer_id=r.customer_id JOIN car c on r.car_id=c.car_id;
+ELSE
+SELECT concat(cu.fristname,' ', cu.lastname) AS Customer_Name,c.car_name, i.rental_price AS Rent_Per_Day,i.taken_date,i.return_date,i.total_amount  FROM invoice i JOIN customer cu ON i.customer_id=cu.customer_id JOIN rent r on cu.customer_id=r.customer_id JOIN car c on r.car_id=c.car_id WHERE c.car_name =_car_name;
+END IF;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `login_sp` (IN `_username` VARCHAR(100), IN `_password` VARCHAR(100))   BEGIN
@@ -78,9 +92,32 @@ END if;
 
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `payment_repo` (IN `_tellphone` INT)   BEGIN
+if(_tellphone = '0000-00-00')THEN
+SELECT concat(cu.fristname, ' ', cu.lastname) AS Customer_name,p.amount as Total_amount,a.bank_name,pa.method_name,p.date FROM payment p JOIN customer cu ON cu.customer_id=p.customer_id JOIN payment_method pa ON pa.payment_method_id=p.payment_method_id JOIN account a ON a.account_id=p.account_id;
+ELSE
+SELECT concat(cu.fristname, ' ', cu.lastname) AS Customer_name,p.amount as Total_amount,a.bank_name,pa.method_name,p.date FROM payment p JOIN customer cu ON cu.customer_id=p.customer_id JOIN payment_method pa ON pa.payment_method_id=p.payment_method_id JOIN account a ON a.account_id=p.account_id WHERE cu.phone=_tellphone;
+END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `read_all_rent_per_day` (IN `_customer_id` INT)   BEGIN
 
 SELECT c.car_name,c.rental_price,r.taken_date,r.return_date, TIMESTAMPDIFF(DAY,r.taken_date,r.return_date)*c.rental_price as amount from rent r JOIN car c on r.car_id=c.car_id where customer_id=_customer_id;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `read_bill_repot` (IN `_tellphone` INT)   BEGIN
+if(_tellphone= '0000-00-00')THEN
+SELECT concat(e.emp_first_name, ' ', e.emp_last_name) as employe_name,b.amount as salary, b.user,b.date from bill b JOIN employee e on b.emp_id=e.emp_id;
+else
+SELECT concat(e.emp_first_name, ' ', e.emp_last_name) as employe_name,b.amount as salary, b.user,b.date from bill b JOIN employee e on b.emp_id=e.emp_id WHERE e.phone=_tellphone;
+END if;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `read_charge_repo` (IN `_month_name` VARCHAR(100))   BEGIN
+
+SELECT concat(e.emp_first_name,' ',e.emp_last_name) AS employee_name,j.position,m.month_name,ch.year,ch.description,a.bank_name,ch.user_id as user FROM charge ch JOIN employee e ON ch.emp_id=e.emp_id JOIN jop_title j ON ch.title_id=j.title_id JOIN month m ON ch.month_id=m.month_id JOIN account a ON ch.account_id=a.account_id WHERE active ='Charged' and m.month_name=_month_name;
+
 
 END$$
 
@@ -138,6 +175,14 @@ END IF;
 
 END if;
 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rent_repo` (IN `_car_name` VARCHAR(100))   BEGIN
+if(_car_name = ' ')THEN
+SELECT concat(cu.fristname,' ',cu.lastname) AS Customer_name,c.car_name,r.taken_date,r.return_date FROM rent r JOIN customer cu ON r.customer_id=cu.customer_id JOIN car c ON r.car_id=c.car_id;
+ELSE
+SELECT concat(cu.fristname,' ',cu.lastname) AS Customer_name,c.car_name,r.taken_date,r.return_date FROM rent r JOIN customer cu ON r.customer_id=cu.customer_id JOIN car c ON r.car_id=c.car_id WHERE c.car_name =_car_name;
+END IF;
 END$$
 
 --
@@ -200,9 +245,9 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`account_id`, `bank_name`, `holder_name`, `account_number`, `balance`, `date`) VALUES
-(1, 'Salaam Bank', 'Mohamed Abdullahi Omer', '1234567', '520', '2023-06-14 14:29:43'),
+(1, 'Salaam Bank', 'Mohamed Abdullahi Omer', '1234567', '770', '2023-06-19 13:41:32'),
 (2, 'dahabshiil', 'garaad xuseen', '12345', '600', '2023-06-12 18:53:19'),
-(3, 'Premmier Bank', 'Raashid moalim', '123459', '27880', '2023-06-14 14:44:56');
+(3, 'Premmier Bank', 'Raashid moalim', '123459', '19880', '2023-06-18 11:00:58');
 
 -- --------------------------------------------------------
 
@@ -223,17 +268,10 @@ CREATE TABLE `bill` (
 --
 
 INSERT INTO `bill` (`bill_id`, `emp_id`, `amount`, `user`, `date`) VALUES
-(1, 2, '180.00', 'ximaani', '2023-06-12 21:08:52'),
-(2, 3, '180.00', 'ximaani', '2023-06-12 21:09:11'),
-(3, 5, '180.00', 'ximaani', '2023-06-12 21:09:23'),
-(4, 1, '800.00', 'ximaani', '2023-06-12 21:09:40'),
-(5, 4, '800.00', 'ximaani', '2023-06-13 09:18:18'),
-(6, 6, '180.00', 'ximaani', '2023-06-13 09:37:10'),
-(7, 7, '180.00', 'ximaani', '2023-06-13 09:37:17'),
-(8, 1, '800.00', 'ximaani', '2023-06-14 14:34:26'),
-(9, 2, '180.00', 'ximaani', '2023-06-14 14:34:36'),
-(10, 3, '180.00', 'ximaani', '2023-06-14 14:34:44'),
-(11, 4, '800.00', 'ximaani', '2023-06-14 14:34:54');
+(1, 3, '180.00', 'ximaani', '2023-06-16 11:14:51'),
+(2, 6, '180.00', 'ximaani', '2023-06-16 13:11:20'),
+(3, 2, '360.00', 'misbil', '2023-06-18 11:03:47'),
+(4, 8, '500.00', 'misbil', '2023-06-18 11:04:09');
 
 --
 -- Triggers `bill`
@@ -241,7 +279,7 @@ INSERT INTO `bill` (`bill_id`, `emp_id`, `amount`, `user`, `date`) VALUES
 DELIMITER $$
 CREATE TRIGGER `update_active` AFTER INSERT ON `bill` FOR EACH ROW BEGIN
 
-update charge set active =1
+update charge set active ='Received'
 WHERE emp_id=new.emp_id;
 
 
@@ -296,10 +334,16 @@ CREATE TABLE `car` (
 --
 
 INSERT INTO `car` (`car_id`, `car_name`, `car_number`, `modal_id`, `transmission_id`, `type_fuel_id`, `rental_price`, `data`) VALUES
-(1, 'hondia', 'abv12', 3, 2, 3, 80, '2023-05-29 08:17:48'),
-(2, 'zuzuki', 'b123', 2, 2, 4, 50, '2023-05-29 08:18:25'),
-(4, 'barada', '1234', 2, 1, 3, 180, '2023-06-10 08:25:33'),
-(5, 'marshedis', 'ab1213', 6, 1, 3, 60, '2023-06-03 19:31:48');
+(1, 'hondia', 'A1234', 3, 2, 3, 80, '2023-06-16 06:50:34'),
+(2, 'zuzuki', 'D123', 2, 2, 4, 50, '2023-06-16 06:51:20'),
+(4, 'barada', 'B1234', 2, 1, 3, 180, '2023-06-16 06:50:50'),
+(5, 'marshedis', 'C1213', 6, 1, 3, 60, '2023-06-16 06:51:05'),
+(6, '', 'a78788', 1, 1, 3, 99, '2023-06-19 13:24:18'),
+(7, '', 'a78788', 1, 1, 3, 99, '2023-06-19 13:24:36'),
+(8, '', '14fgsg', 2, 1, 3, 77, '2023-06-19 13:26:01'),
+(9, '', '14fgsg', 2, 1, 3, 77, '2023-06-19 13:26:13'),
+(10, '', 'av123', 2, 1, 4, 77, '2023-06-19 13:28:31'),
+(11, '', 'av123', 2, 1, 4, 77, '2023-06-19 13:28:41');
 
 -- --------------------------------------------------------
 
@@ -317,7 +361,7 @@ CREATE TABLE `charge` (
   `description` text NOT NULL,
   `account_id` int(11) NOT NULL,
   `user_id` varchar(100) NOT NULL,
-  `active` int(11) NOT NULL DEFAULT 0,
+  `active` varchar(100) NOT NULL DEFAULT 'Charged',
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -326,27 +370,21 @@ CREATE TABLE `charge` (
 --
 
 INSERT INTO `charge` (`charge_id`, `emp_id`, `title_id`, `Amount`, `month_id`, `year`, `description`, `account_id`, `user_id`, `active`, `date`) VALUES
-(1, 2, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-12 21:08:52'),
-(2, 3, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-12 21:09:11'),
-(3, 5, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-12 21:09:23'),
-(4, 1, 2, '800', 1, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-12 21:09:40'),
-(5, 4, 2, '800', 1, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-13 09:18:18'),
-(11, 6, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-13 09:37:10'),
-(14, 7, 1, '180', 1, '2023', 'mmmm', 3, 'ximaani', 1, '2023-06-13 09:37:17'),
-(17, 2, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-14 14:34:36'),
-(18, 3, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-14 14:34:44'),
-(19, 5, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-12 21:00:00'),
-(20, 6, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-12 21:00:00'),
-(21, 7, 1, '180', 2, '2023', 'mushaar', 3, 'ximaani', 0, '2023-06-12 21:00:00'),
-(22, 1, 2, '800', 2, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-14 14:34:26'),
-(23, 4, 2, '800', 2, '2023', 'mushaar', 3, 'ximaani', 1, '2023-06-14 14:34:54'),
-(24, 2, 1, '180', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
-(25, 3, 1, '180', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
-(26, 5, 1, '180', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
-(27, 6, 1, '180', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
-(28, 7, 1, '180', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
-(29, 1, 2, '800', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00'),
-(30, 4, 2, '800', 3, '2023', 'kkkk', 3, 'ximaani', 0, '2023-06-13 21:00:00');
+(1, 2, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 'Received', '2023-06-18 11:03:47'),
+(2, 3, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 'Received', '2023-06-16 11:14:51'),
+(3, 5, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 'Charged', '2023-06-15 21:00:00'),
+(4, 6, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 'Received', '2023-06-16 13:11:20'),
+(5, 7, 1, '180', 1, '2023', 'mushaar', 3, 'ximaani', 'Charged', '2023-06-15 21:00:00'),
+(6, 1, 2, '800', 1, '2023', 'mushaar', 3, 'ximaani', 'Charged', '2023-06-15 21:00:00'),
+(7, 4, 2, '800', 1, '2023', 'mushaar', 3, 'ximaani', 'Charged', '2023-06-15 21:00:00'),
+(8, 2, 1, '180', 2, '2023', 'mushaar', 3, 'misbil', 'Received', '2023-06-18 11:03:47'),
+(9, 3, 1, '180', 2, '2023', 'mushaar', 3, 'misbil', 'Charged', '2023-06-17 21:00:00'),
+(10, 5, 1, '180', 2, '2023', 'mushaar', 3, 'misbil', 'Charged', '2023-06-17 21:00:00'),
+(11, 6, 1, '180', 2, '2023', 'mushaar', 3, 'misbil', 'Charged', '2023-06-17 21:00:00'),
+(12, 7, 1, '180', 2, '2023', 'mushaar', 3, 'misbil', 'Charged', '2023-06-17 21:00:00'),
+(13, 1, 2, '800', 2, '2023', 'mushaar', 3, 'misbil', 'Charged', '2023-06-17 21:00:00'),
+(14, 4, 2, '800', 2, '2023', 'mushaar', 3, 'misbil', 'Charged', '2023-06-17 21:00:00'),
+(15, 8, 3, '500', 2, '2023', 'mushaar', 3, 'misbil', 'Received', '2023-06-18 11:04:09');
 
 --
 -- Triggers `charge`
@@ -388,7 +426,8 @@ INSERT INTO `customer` (`customer_id`, `fristname`, `lastname`, `phone`, `city`,
 (5, 'hasan', 'jamaal', '6544332', 'Darulsalaam', 'mogadisho', '2023-05-26 08:42:26'),
 (6, 'libaana', 'geedi', '65456456', 'Darulsalaam', 'mogadisho', '2023-05-26 08:42:47'),
 (7, 'yaxye', 'haashi', '6544332', 'Darulsalaam', 'mogadisho', '2023-05-26 09:07:17'),
-(8, 'bashiir', 'ciise', '4453434', 'Darulsalaam', 'mogadisho', '2023-05-26 10:14:11');
+(8, 'bashiir', 'ciise', '4453434', 'Darulsalaam', 'mogadisho', '2023-05-26 10:14:11'),
+(11, 'misbil', 'feysal', '78758', 'banaadir', 'xamar', '2023-06-18 10:45:23');
 
 -- --------------------------------------------------------
 
@@ -417,8 +456,9 @@ INSERT INTO `employee` (`emp_id`, `emp_first_name`, `emp_last_name`, `phone`, `a
 (3, 'kk', 'hh', '6544332', 'karaan', 1, 1, '2023-06-11 18:40:20'),
 (4, 'ximaa', 'ni', '64753', 'karaan', 2, 1, '2023-06-12 12:43:52'),
 (5, 'yuusuf', 'xasan', '566656', 'hodan', 1, 2, '2023-06-12 16:51:14'),
-(6, 'paana', 'abdi', '7676767', 'bakaaro', 1, 7, '2023-06-13 09:25:31'),
-(7, 'adirahmaac', 'km', '5657657', 'karaan', 1, 8, '2023-06-13 09:32:13');
+(6, 'paana', 'abdi', '7676767', 'bakaaro', 1, 7, '2023-06-16 06:43:37'),
+(7, 'adirahmaac', 'km', '5657657', 'karaan', 1, 8, '2023-06-13 09:32:13'),
+(8, 'misbil', 'feysal', '678687', 'karaan', 3, 1, '2023-06-18 10:42:39');
 
 -- --------------------------------------------------------
 
@@ -444,7 +484,10 @@ INSERT INTO `expense` (`id`, `amount`, `type`, `description`, `user_id`, `Accoun
 (1, 100.00, 'Expense', 'mushaar', 'ximaani', 2, '2023-06-12 16:29:04'),
 (2, 500.00, 'Income', 'xayeesiin', 'ximaani', 2, '2023-06-12 18:53:19'),
 (3, 100.00, 'Income', 'kiro', 'ximaani', 1, '2023-06-14 14:29:06'),
-(4, 100.00, 'Expense', 'mushaar', 'ximaani', 1, '2023-06-14 14:29:43');
+(4, 100.00, 'Expense', 'mushaar', 'ximaani', 1, '2023-06-14 14:29:43'),
+(5, 100.00, 'Income', 'adverticement', 'ximaani', 1, '2023-06-16 06:45:02'),
+(6, 100.00, 'Income', 'share', 'misbil', 1, '2023-06-18 10:56:43'),
+(7, 50.00, 'Income', 'mmm', 'ximaani', 1, '2023-06-19 13:41:32');
 
 --
 -- Triggers `expense`
@@ -490,7 +533,13 @@ INSERT INTO `invoice` (`invoice_id`, `customer_id`, `car_id`, `rental_price`, `t
 ('INV001', 1, 'hondia', '80', '2023-06-14', '2023-06-16', '160', '2023-06-14 14:24:26'),
 ('INV002', 3, 'zuzuki', '50', '2023-06-14', '2023-06-17', '150', '2023-06-14 14:24:43'),
 ('INV003', 4, 'barada', '180', '2023-06-14', '2023-06-18', '720', '2023-06-14 14:27:20'),
-('INV004', 5, 'marshedis', '60', '2023-06-14', '2023-06-19', '300', '2023-06-14 19:24:08');
+('INV004', 5, 'marshedis', '60', '2023-06-14', '2023-06-19', '300', '2023-06-14 19:24:08'),
+('INV005', 0, '', '0', '0000-00-00', '0000-00-00', '0', '2023-06-16 06:57:51'),
+('INV006', 0, '', '0', '0000-00-00', '0000-00-00', '0', '2023-06-16 06:58:32'),
+('INV007', 0, '', '0', '0000-00-00', '0000-00-00', '0', '2023-06-16 07:00:21'),
+('INV008', 8, 'hondia', '80', '2023-06-15', '2023-06-30', '1200', '2023-06-16 13:04:28'),
+('INV009', 11, 'marshedis', '60', '2023-06-18', '2023-06-20', '120', '2023-06-18 10:50:33'),
+('INV010', 6, 'hondia', '80', '2023-06-18', '2023-06-21', '240', '2023-06-18 14:17:35');
 
 --
 -- Triggers `invoice`
@@ -525,7 +574,8 @@ CREATE TABLE `jop_title` (
 
 INSERT INTO `jop_title` (`title_id`, `position`, `salary`, `date`) VALUES
 (1, 'cleaner', 180, '2023-06-08 20:19:39'),
-(2, 'manager', 800, '2023-06-12 10:16:01');
+(2, 'manager', 800, '2023-06-12 10:16:01'),
+(3, 'Renter', 500, '2023-06-16 06:52:31');
 
 -- --------------------------------------------------------
 
@@ -595,7 +645,9 @@ INSERT INTO `payment` (`payment_id`, `customer_id`, `amount`, `payment_method_id
 (1, 1, '160.00', 6, 1, '2023-06-14 14:25:37'),
 (2, 3, '150.00', 1, 1, '2023-06-14 14:26:08'),
 (3, 4, '720.00', 6, 1, '2023-06-14 14:27:56'),
-(4, 5, '300.00', 1, 1, '2023-06-14 19:24:31');
+(4, 5, '300.00', 1, 1, '2023-06-14 19:24:31'),
+(5, 11, '120.00', 6, 2, '2023-06-18 10:54:59'),
+(6, 6, '240.00', 6, 1, '2023-06-18 14:21:21');
 
 --
 -- Triggers `payment`
@@ -655,7 +707,11 @@ INSERT INTO `rent` (`rent_id`, `customer_id`, `car_id`, `taken_date`, `return_da
 (1, 1, 1, '2023-06-14', '2023-06-16', 'Paid', '2023-06-14 14:25:37'),
 (2, 3, 2, '2023-06-14', '2023-06-17', 'Paid', '2023-06-14 14:26:08'),
 (3, 4, 4, '2023-06-14', '2023-06-18', 'Paid', '2023-06-14 14:27:56'),
-(4, 5, 5, '2023-06-14', '2023-06-19', 'Paid', '2023-06-14 19:24:31');
+(4, 5, 5, '2023-06-14', '2023-06-19', 'Paid', '2023-06-14 19:24:31'),
+(5, 8, 1, '2023-06-15', '2023-06-30', 'Invoiced', '2023-06-16 13:04:28'),
+(6, 7, 4, '2023-06-16', '2023-06-21', 'pending', '2023-06-16 14:52:36'),
+(7, 11, 5, '2023-06-18', '2023-06-20', 'Paid', '2023-06-18 10:54:59'),
+(8, 6, 1, '2023-06-18', '2023-06-21', 'Paid', '2023-06-18 14:21:21');
 
 -- --------------------------------------------------------
 
@@ -719,7 +775,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `emp_id`, `username`, `password`, `image`, `status`, `date`) VALUES
 ('USR001', 1, 'anwar', '81dc9bdb52d04dc20036dbd8313ed055', 'USR001.png', 'active', '2023-06-08 20:53:17'),
 ('USR002', 3, 'kk', 'd41d8cd98f00b204e9800998ecf8427e', 'USR002.png', 'active', '2023-06-11 19:42:50'),
-('USR003', 4, 'ximaani', '81dc9bdb52d04dc20036dbd8313ed055', 'USR003.png', 'active', '2023-06-12 12:44:20');
+('USR003', 4, 'ximaani', '81dc9bdb52d04dc20036dbd8313ed055', 'USR003.png', 'active', '2023-06-12 12:44:20'),
+('USR004', 8, 'misbil', '81dc9bdb52d04dc20036dbd8313ed055', 'USR004.png', 'active', '2023-06-18 10:44:17');
 
 --
 -- Indexes for dumped tables
@@ -860,7 +917,7 @@ ALTER TABLE `account`
 -- AUTO_INCREMENT for table `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `branch`
@@ -872,37 +929,37 @@ ALTER TABLE `branch`
 -- AUTO_INCREMENT for table `car`
 --
 ALTER TABLE `car`
-  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `charge`
 --
 ALTER TABLE `charge`
-  MODIFY `charge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `charge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `expense`
 --
 ALTER TABLE `expense`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `jop_title`
 --
 ALTER TABLE `jop_title`
-  MODIFY `title_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `title_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `modal`
@@ -920,7 +977,7 @@ ALTER TABLE `month`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `payment_method`
@@ -932,7 +989,7 @@ ALTER TABLE `payment_method`
 -- AUTO_INCREMENT for table `rent`
 --
 ALTER TABLE `rent`
-  MODIFY `rent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `rent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `transmission`
@@ -976,8 +1033,7 @@ ALTER TABLE `payment`
 -- Constraints for table `rent`
 --
 ALTER TABLE `rent`
-  ADD CONSTRAINT `rent_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
-  ADD CONSTRAINT `rent_ibfk_2` FOREIGN KEY (`car_id`) REFERENCES `car` (`car_id`);
+  ADD CONSTRAINT `rent_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`);
 
 --
 -- Constraints for table `users`
