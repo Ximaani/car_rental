@@ -148,6 +148,13 @@ include 'include/nav.php';
 
             <div class="col-sm-12 mt-3">
                 <div class="form-group">
+                <label for="">quantity</label>
+                <input type="number" class="form-control" name="quantity" id="quantity">
+                </div>
+
+            </div>
+            <div class="col-sm-12 mt-3">
+                <div class="form-group">
                 <label for="">taken_date</label>
                 <input type="date" class="form-control" name="taken_date" id="taken_date">
                 </div>

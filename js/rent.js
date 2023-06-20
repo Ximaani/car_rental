@@ -90,6 +90,7 @@ $("#rentform").on("submit", function (event) {
 
   let customer_id = $("#customer_id").val();
   let car_id = $("#car_id").val();
+  let quantity = $("#quantity").val();
   let taken_date = $("#taken_date").val();
   let return_date = $("#return_date").val();
   let id = $("#update_id").val();
@@ -100,6 +101,7 @@ $("#rentform").on("submit", function (event) {
     sendingData = {
       "customer_id": customer_id,
       "car_id": car_id,
+      "quantity": quantity,
       "taken_date": taken_date,
       "return_date": return_date,
       "action": "register_rent"
@@ -110,6 +112,7 @@ $("#rentform").on("submit", function (event) {
       "rent_id": id,
       "customer_id": customer_id,
       "car_id": car_id,
+      "quantity": quantity,
       "taken_date": taken_date,
       "return_date": return_date,
       "action": "update_rent"
@@ -128,7 +131,7 @@ $("#rentform").on("submit", function (event) {
       let response = data.data;
 
       if (status) {
-        swal("Good job!", response, "success");
+        swal("SORRY!", response, "success");
         btnAction = "Insert";
         $("#rentform")[0].reset();
         loadrent();
@@ -230,6 +233,7 @@ function get_rent_info(rent_id) {
         $("#update_id").val(response['rent_id']);
         $("#customer_id").val(response['customer_id']);
         $("#car_id").val(response['car_id']);
+        $("#quantity").val(response['quantity']);
         $("#taken_date").val(response['taken_date']);
         $("#return_date").val(response['return_date']);
         $("#rent_price").val(response['rent_price']);

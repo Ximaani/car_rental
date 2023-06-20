@@ -6,19 +6,29 @@ include '../config/conn.php';
 function register_rent($conn){
     extract($_POST);
     $data = array();
-    $query = "insert into rent (customer_id, car_id,taken_date, return_date)
-    values('$customer_id','$car_id','$taken_date','$return_date')";
+    $query = "call rent_cars('$customer_id','$car_id','$quantity','$taken_date','$return_date')";
+
+    // $query = "insert into rent (customer_id, car_id,quantity,taken_date, return_date)
+    // values('$customer_id','$car_id','$quantity','$taken_date','$return_date')";
 
     $result = $conn->query($query);
 
 
     if($result){
 
-      //  $row= $result->fetch_assoc();
+    
+        $row= $result->fetch_assoc();
 
-            $data = array("status" => true, "data" => "Registered succesfully 😂😊😒😎");
-        
-
+        if($row['massage']=='Deny'){
+         $data = array("status" => false, "data" => "unavailible");
+ 
+        }
+ 
+        else if($row['massage']=='Registered'){
+         $data = array("status" => true, "data" => "the rent has been registered done");
+ 
+        } 
+ 
 
     }else{
         $data = array("status" => false, "data"=> $conn->error);
@@ -32,7 +42,7 @@ function register_rent($conn){
 function read_all_rent($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT concat(c.fristname, ' ', c.lastname) as customer_name, ca.car_name,ca.rental_price as rental_per_day,r.taken_date,r.return_date,r.date,r.action from rent r JOIN customer c on r.customer_id=c.customer_id JOIN car ca on r.car_id=ca.car_id ";
+   $query ="SELECT concat(c.fristname, ' ', c.lastname) as customer_name, ca.car_name,ca.rental_price as rental_per_day,r.taken_date,r.return_date,r.action from rent r JOIN customer c on r.customer_id=c.customer_id JOIN car ca on r.car_id=ca.car_id ";
     $result = $conn->query($query);
 
 
@@ -124,7 +134,7 @@ function update_rent($conn){
 
     $data = array();
 
-    $query = "UPDATE rent set customer_id = '$customer_id', car_id = '$car_id', taken_date = '$taken_date', return_date = '$return_date'  WHERE rent_id= '$rent_id'";
+    $query = "UPDATE rent set customer_id = '$customer_id', car_id = '$car_id', quantity = '$quantity',taken_date = '$taken_date', return_date = '$return_date'  WHERE rent_id= '$rent_id'";
 
     $result = $conn->query($query);
 

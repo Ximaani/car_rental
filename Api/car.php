@@ -9,6 +9,7 @@ include '..//config/conn.php';
 function register_car($conn){
     extract($_POST);
     $data = array();
+
     $query = "INSERT INTO car (car_name, car_number, modal_id, transmission_id,type_fuel_id,rental_price,conditions_id,quantity)
      values('$car_names', '$car_number', '$modal_id', '$transmission_id','$type_fuel_id', '$rental_price', '$conditions', '$quantity')";
 
@@ -98,7 +99,7 @@ function read_all_condition($conn){
 function read_all_car($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT c.car_name,c.car_number,m.modal_name,t.transmission_name as Trans_name,tf.fuel_name,c.rental_price as rent_per_day,co.conditions_name,c.quantity,c.data from car c join modal m on c.modal_id=m.modal_id JOIN transmission t on c.transmission_id=t.transmission_id JOIN typefuel tf on c.type_fuel_id=tf.type_fuel_id JOIN conditions co ON c.conditions_id=co.conditions_id";
+   $query ="SELECT c.car_name,c.car_number,m.modal_name,tf.fuel_name,c.rental_price as rent_per_day,co.conditions_name,c.quantity,status from car c join modal m on c.modal_id=m.modal_id JOIN transmission t on c.transmission_id=t.transmission_id JOIN typefuel tf on c.type_fuel_id=tf.type_fuel_id JOIN conditions co ON c.conditions_id=co.conditions_id";
     $result = $conn->query($query);
 
 

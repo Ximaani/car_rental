@@ -264,7 +264,7 @@ $("#carform").on("submit", function (event) {
   let rental_price = $("#rental_price").val();
   let conditions = $("#conditions").val();
   let quantity = $("#quantity").val();
-  let id = $("#update_id").val();
+  let car_id = $("#update_id").val();
 
   let sendingData = {}
 
@@ -283,7 +283,7 @@ $("#carform").on("submit", function (event) {
 
   } else {
     sendingData = {
-      "car_id": id,
+      "car_id": car_id,
       "car_names": car_names,
       "car_number": car_number,
       "modal_id": modal_id,
@@ -366,7 +366,7 @@ function load_car() {
             th += `<th>${r}</th>`;
 
             if (r == "status") {
-              if (res[r] == "Top") {
+              if (res[r] == "availible") {
                 tr += `<td><span class="badge bg-success">${res[r]}</span></td>`;
               } else {
                 tr += `<td><span class="badge bg-danger">${res[r]}</span></td>`;
@@ -499,14 +499,14 @@ function Delete_car(car_id) {
 
 
 $("#carTable").on('click', "a.update_info", function () {
-  let id = $(this).attr("update_id");
-  get_car_info(id)
+  let car_id = $(this).attr("update_id");
+  get_car_info(car_id)
 })
 
 $("#carTable").on('click', "a.delete_info", function () {
-  let id = $(this).attr("delete_id");
+  let car_id = $(this).attr("delete_id");
   if (confirm("Are you sure To Delete")) {
-    Delete_car(id)
+    Delete_car(car_id)
 
   }
 

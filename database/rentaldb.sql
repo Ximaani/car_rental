@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 19, 2023 at 07:43 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Host: localhost
+-- Generation Time: Jun 20, 2023 at 12:33 PM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -177,6 +177,23 @@ END if;
 
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rent_cars` (IN `_customer_id` INT, IN `_car_id` INT, IN `_quantity` INT, IN `_taken_date` DATE, IN `_return_date` DATE)   BEGIN
+
+if(_quantity > read_quantity(_car_id))THEN
+
+SELECT 'Deny' AS massage;
+
+ELSE
+INSERT INTO rent(customer_id,car_id,quantity,taken_date,return_date)VALUES
+(_customer_id,_car_id,_quantity,_taken_date,_return_date
+);
+
+SELECT 'Registered' AS massage;
+
+END IF;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `rent_repo` (IN `_car_name` VARCHAR(100))   BEGIN
 if(_car_name = ' ')THEN
 SELECT concat(cu.fristname,' ',cu.lastname) AS Customer_name,c.car_name,r.taken_date,r.return_date FROM rent r JOIN customer cu ON r.customer_id=cu.customer_id JOIN car c ON r.car_id=c.car_id;
@@ -211,6 +228,14 @@ set @balance=0.00;
 SELECT sum(balance)into @balance from account
 WHERE account_id =_account_id;
 RETURN @balance;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `read_quantity` (`_car_id` INT) RETURNS INT(11)  BEGIN
+set @quantity=0.00;
+SELECT sum(quantity)into @quantity from car
+WHERE car_id =_car_id;
+RETURN @quantity;
 
 END$$
 
@@ -328,6 +353,7 @@ CREATE TABLE `car` (
   `rental_price` float NOT NULL,
   `conditions_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
+  `status` varchar(200) NOT NULL DEFAULT 'availible',
   `data` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -335,8 +361,10 @@ CREATE TABLE `car` (
 -- Dumping data for table `car`
 --
 
-INSERT INTO `car` (`car_id`, `car_name`, `car_number`, `modal_id`, `transmission_id`, `type_fuel_id`, `rental_price`, `conditions_id`, `quantity`, `data`) VALUES
-(1, 'number geni', 'A112', 2, 1, 3, 120, 1, 5, '2023-06-19 17:25:44');
+INSERT INTO `car` (`car_id`, `car_name`, `car_number`, `modal_id`, `transmission_id`, `type_fuel_id`, `rental_price`, `conditions_id`, `quantity`, `status`, `data`) VALUES
+(1, 'number geni', 'A112', 2, 1, 3, 120, 1, 2, 'availible', '2023-06-20 06:55:52'),
+(3, 'www', '222', 1, 1, 3, 11, 1, 0, 'unavialible', '2023-06-19 18:50:03'),
+(4, 'bmw', '1212', 2, 1, 4, 200, 1, 0, 'unavialible', '2023-06-20 07:50:59');
 
 -- --------------------------------------------------------
 
@@ -706,6 +734,7 @@ CREATE TABLE `rent` (
   `rent_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `car_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `taken_date` varchar(200) NOT NULL,
   `return_date` varchar(100) NOT NULL,
   `action` varchar(50) NOT NULL DEFAULT 'pending',
@@ -716,15 +745,33 @@ CREATE TABLE `rent` (
 -- Dumping data for table `rent`
 --
 
-INSERT INTO `rent` (`rent_id`, `customer_id`, `car_id`, `taken_date`, `return_date`, `action`, `date`) VALUES
-(1, 1, 1, '2023-06-14', '2023-06-16', 'Paid', '2023-06-14 14:25:37'),
-(2, 3, 2, '2023-06-14', '2023-06-17', 'Paid', '2023-06-14 14:26:08'),
-(3, 4, 4, '2023-06-14', '2023-06-18', 'Paid', '2023-06-14 14:27:56'),
-(4, 5, 5, '2023-06-14', '2023-06-19', 'Paid', '2023-06-14 19:24:31'),
-(5, 8, 1, '2023-06-15', '2023-06-30', 'Invoiced', '2023-06-16 13:04:28'),
-(6, 7, 4, '2023-06-16', '2023-06-21', 'pending', '2023-06-16 14:52:36'),
-(7, 11, 5, '2023-06-18', '2023-06-20', 'Paid', '2023-06-18 10:54:59'),
-(8, 6, 1, '2023-06-18', '2023-06-21', 'Paid', '2023-06-18 14:21:21');
+INSERT INTO `rent` (`rent_id`, `customer_id`, `car_id`, `quantity`, `taken_date`, `return_date`, `action`, `date`) VALUES
+(1, 1, 3, 2, '2023-06-14', '2023-06-15', 'pending', '2023-06-19 18:46:22'),
+(2, 3, 3, 2, '2023-06-20', '2023-06-21', 'pending', '2023-06-19 18:49:12'),
+(3, 5, 3, 2, '2023-06-14', '2023-06-29', 'pending', '2023-06-19 18:50:03'),
+(6, 4, 1, 3, '2023-06-29', '2023-06-29', 'pending', '2023-06-20 06:55:52'),
+(7, 7, 4, 12, '2023-06-16', '2023-07-01', 'pending', '2023-06-20 07:33:44'),
+(8, 11, 4, 8, '2023-06-16', '2023-06-20', 'pending', '2023-06-20 07:50:59');
+
+--
+-- Triggers `rent`
+--
+DELIMITER $$
+CREATE TRIGGER `test2` AFTER INSERT ON `rent` FOR EACH ROW BEGIN
+Update car set status = 'unavialible'
+where quantity =0 and car_id = new.car_id;
+
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `yes` AFTER INSERT ON `rent` FOR EACH ROW BEGIN 
+Update car set quantity = quantity - NEW.quantity
+where car_id = NEW.car_id;
+
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -949,7 +996,7 @@ ALTER TABLE `branch`
 -- AUTO_INCREMENT for table `car`
 --
 ALTER TABLE `car`
-  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `charge`
