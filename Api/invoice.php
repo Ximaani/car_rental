@@ -34,7 +34,8 @@ function register_invoice($conn){
 function read_all_invoice($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT i.invoice_id,concat(cu.fristname, ' ', cu.lastname) as customer_name, i.car_id as car_name, ca.rental_price, r.taken_date,r.return_date,i.total_amount, i.date from invoice i JOIN rent  r on i.customer_id=r.customer_id JOIN car ca on r.car_id=ca.car_id JOIN customer cu on i.customer_id=cu.customer_id";
+   $query ="SELECT * from invoice";
+//    $query ="SELECT i.invoice_id,concat(cu.fristname, ' ', cu.lastname) as customer_name, i.car_id as car_name, ca.rental_price, r.taken_date,r.return_date,i.total_amount, i.date from invoice i JOIN rent  r on i.customer_id=r.customer_id JOIN car ca on r.car_id=ca.car_id JOIN customer cu on i.customer_id=cu.customer_id";
     $result = $conn->query($query);
 
 

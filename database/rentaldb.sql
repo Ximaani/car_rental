@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 20, 2023 at 12:33 PM
+-- Generation Time: Jun 23, 2023 at 12:00 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.29
 
@@ -362,9 +362,11 @@ CREATE TABLE `car` (
 --
 
 INSERT INTO `car` (`car_id`, `car_name`, `car_number`, `modal_id`, `transmission_id`, `type_fuel_id`, `rental_price`, `conditions_id`, `quantity`, `status`, `data`) VALUES
-(1, 'number geni', 'A112', 2, 1, 3, 120, 1, 2, 'availible', '2023-06-20 06:55:52'),
+(1, 'number geni', 'A112', 2, 1, 3, 120, 1, 1, 'availible', '2023-06-23 09:46:23'),
 (3, 'www', '222', 1, 1, 3, 11, 1, 0, 'unavialible', '2023-06-19 18:50:03'),
-(4, 'bmw', '1212', 2, 1, 4, 200, 1, 0, 'unavialible', '2023-06-20 07:50:59');
+(4, 'bmw', '1212', 2, 1, 4, 200, 1, 0, 'unavialible', '2023-06-20 07:50:59'),
+(5, 'v8', '1212', 2, 2, 3, 122, 2, 12, 'availible', '2023-06-23 09:50:04'),
+(6, 'marcedes', 'AB1234', 1, 2, 4, 150, 1, 16, 'availible', '2023-06-23 09:57:59');
 
 -- --------------------------------------------------------
 
@@ -571,16 +573,9 @@ CREATE TABLE `invoice` (
 --
 
 INSERT INTO `invoice` (`invoice_id`, `customer_id`, `car_id`, `rental_price`, `taken_date`, `return_date`, `total_amount`, `date`) VALUES
-('INV001', 1, 'hondia', '80', '2023-06-14', '2023-06-16', '160', '2023-06-14 14:24:26'),
-('INV002', 3, 'zuzuki', '50', '2023-06-14', '2023-06-17', '150', '2023-06-14 14:24:43'),
-('INV003', 4, 'barada', '180', '2023-06-14', '2023-06-18', '720', '2023-06-14 14:27:20'),
-('INV004', 5, 'marshedis', '60', '2023-06-14', '2023-06-19', '300', '2023-06-14 19:24:08'),
-('INV005', 0, '', '0', '0000-00-00', '0000-00-00', '0', '2023-06-16 06:57:51'),
-('INV006', 0, '', '0', '0000-00-00', '0000-00-00', '0', '2023-06-16 06:58:32'),
-('INV007', 0, '', '0', '0000-00-00', '0000-00-00', '0', '2023-06-16 07:00:21'),
-('INV008', 8, 'hondia', '80', '2023-06-15', '2023-06-30', '1200', '2023-06-16 13:04:28'),
-('INV009', 11, 'marshedis', '60', '2023-06-18', '2023-06-20', '120', '2023-06-18 10:50:33'),
-('INV010', 6, 'hondia', '80', '2023-06-18', '2023-06-21', '240', '2023-06-18 14:17:35');
+('INV001', 1, 'number geni', '120', '2023-06-23', '2023-06-25', '240', '2023-06-23 09:46:58'),
+('INV002', 1, 'v8', '122', '2023-06-23', '2023-07-09', '1952', '2023-06-23 09:51:13'),
+('INV003', 1, 'marcedes', '150', '2023-06-23', '2023-06-27', '600', '2023-06-23 09:58:33');
 
 --
 -- Triggers `invoice`
@@ -679,18 +674,6 @@ CREATE TABLE `payment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `payment`
---
-
-INSERT INTO `payment` (`payment_id`, `customer_id`, `amount`, `payment_method_id`, `account_id`, `date`) VALUES
-(1, 1, '160.00', 6, 1, '2023-06-14 14:25:37'),
-(2, 3, '150.00', 1, 1, '2023-06-14 14:26:08'),
-(3, 4, '720.00', 6, 1, '2023-06-14 14:27:56'),
-(4, 5, '300.00', 1, 1, '2023-06-14 19:24:31'),
-(5, 11, '120.00', 6, 2, '2023-06-18 10:54:59'),
-(6, 6, '240.00', 6, 1, '2023-06-18 14:21:21');
-
---
 -- Triggers `payment`
 --
 DELIMITER $$
@@ -746,12 +729,9 @@ CREATE TABLE `rent` (
 --
 
 INSERT INTO `rent` (`rent_id`, `customer_id`, `car_id`, `quantity`, `taken_date`, `return_date`, `action`, `date`) VALUES
-(1, 1, 3, 2, '2023-06-14', '2023-06-15', 'pending', '2023-06-19 18:46:22'),
-(2, 3, 3, 2, '2023-06-20', '2023-06-21', 'pending', '2023-06-19 18:49:12'),
-(3, 5, 3, 2, '2023-06-14', '2023-06-29', 'pending', '2023-06-19 18:50:03'),
-(6, 4, 1, 3, '2023-06-29', '2023-06-29', 'pending', '2023-06-20 06:55:52'),
-(7, 7, 4, 12, '2023-06-16', '2023-07-01', 'pending', '2023-06-20 07:33:44'),
-(8, 11, 4, 8, '2023-06-16', '2023-06-20', 'pending', '2023-06-20 07:50:59');
+(1, 1, 1, 1, '2023-06-23', '2023-06-25', 'Invoiced', '2023-06-23 09:46:58'),
+(3, 1, 5, 1, '2023-06-23', '2023-07-09', 'Invoiced', '2023-06-23 09:51:13'),
+(4, 1, 6, 1, '2023-06-23', '2023-06-27', 'Invoiced', '2023-06-23 09:58:33');
 
 --
 -- Triggers `rent`
@@ -948,9 +928,7 @@ ALTER TABLE `payment_method`
 -- Indexes for table `rent`
 --
 ALTER TABLE `rent`
-  ADD PRIMARY KEY (`rent_id`),
-  ADD UNIQUE KEY `student_id` (`customer_id`),
-  ADD KEY `instructor_id` (`car_id`);
+  ADD PRIMARY KEY (`rent_id`);
 
 --
 -- Indexes for table `transmission`
@@ -996,7 +974,7 @@ ALTER TABLE `branch`
 -- AUTO_INCREMENT for table `car`
 --
 ALTER TABLE `car`
-  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `charge`
@@ -1050,7 +1028,7 @@ ALTER TABLE `month`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `payment_method`
@@ -1062,7 +1040,7 @@ ALTER TABLE `payment_method`
 -- AUTO_INCREMENT for table `rent`
 --
 ALTER TABLE `rent`
-  MODIFY `rent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `rent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `transmission`
