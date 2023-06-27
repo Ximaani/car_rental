@@ -8,8 +8,8 @@ function register_invoice($conn){
     $data = array();
     $new_id= generate2($conn);
 
-    $query = "insert into invoice(invoice_id, customer_id, car_id,rental_price,taken_date, return_date,total_amount)
-    values('$new_id','$customers_id','$cars_id','$rental_price','$taken_date','$return_date','$total_amount')";
+    $query = "insert into invoice(invoice_id, rent_id, car_id,rental_price,taken_date, return_date,total_amount)
+    values('$new_id','$Rent_id','$cars_id','$rental_price','$taken_date','$return_date','$total_amount')";
 
     $result = $conn->query($query);
 
@@ -60,7 +60,7 @@ function read_rent_price($conn){
     extract($_POST);
     $data = array();
     $array_data = array();
-    $query = "call read_all_rent_per_day('$customer_id')";
+    $query = "call read_all_rent_per_day('$rent_id')";
 
     $result = $conn->query($query);
 
@@ -83,7 +83,7 @@ function read_rent_price($conn){
 function read_all_customers($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT c.customer_id,concat(c.fristname, ' ', c.lastname) as customer_name from rent r JOIN customer c on r.customer_id=c.customer_id WHERE r.action='pending'";
+   $query ="SELECT r.rent_id, concat(c.fristname, ' ', c.lastname) as customer_name from rent r JOIN customer c on r.customer_id=c.customer_id WHERE r.action='pending'";
     $result = $conn->query($query);
 
 

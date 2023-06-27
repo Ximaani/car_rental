@@ -7,7 +7,6 @@ if (!isset($_SESSION['username'])) {
 
 ?>
 
-
 <?php
 include 'include/header.php';
 
@@ -50,12 +49,14 @@ include 'include/nav.php';
     <div class="col-sm-12">
       <div class="card">
         <div class="text-end">
-        <button type="button" class="btn btn-success  m-2" data-bs-toggle="modal" data-bs-target="#payment_modal">
-       payment
+        <button type="button" class="btn btn-success  m-2" data-bs-toggle="modal" data-bs-target="#returncarmodal">
+       Add returncar
          </button>
          </div>
-        <table class="table" id="paymentTable">
-
+         <div class="table-responsive style="overflow-y: scroll;">
+        <table class="table" id="returncarTable">
+         
+      
         <thead>
        
 
@@ -98,6 +99,7 @@ include 'include/nav.php';
         </table>
         </div>
        </div>
+       </div>
     </div>
   </div>
    <!-- End Page Title -->
@@ -110,58 +112,62 @@ include 'include/nav.php';
   <!-- End #main -->
 
             
-  <div class="modal fade" id="payment_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade " id="returncarmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">payment</h1>
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">returncar</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="paymentform">
+      <form id="returncarform">
         <input type="hidden" name="update_id" id="update_id">
         <div class="row">
            
-        
+       
 
-
-      
-        <div class="col-sm-12">
+        <div class="col-sm-12 mt-3">
                 <div class="form-group">
-                <label for="">customer</label>
-                <select name="rentt_id" id="rentt_id" class="form-control customers">
+                  <label for="">Customer</label>
+                <select name="rent_id" id="rent_id" class="form-control rent">
                 <option value="0">select customer</option>
                 </select>
                 </div>
 
             </div>
 
-            <div class="col-sm-12">
+        <div class="col-sm-12 mt-3">
                 <div class="form-group">
-                <label for="">amount</label>
-                <input type="text" name="amount" id="amount" class="form-control" readonly>
-                </div>
-            </div>
-
-            <div class="col-sm-12">
-                <div class="form-group">
-                <label for="">payment_method</label>
-                <select name="payment_method_id" id="payment_method_id" class="form-control">
-                
-                </select>
+                  <label for="">Car</label>
+                <input type="text" name="car_id" id="returncar" class="form-control" readonly>
                 </div>
 
             </div>
 
-            <div class="col-sm-12">
+            <div class="col-sm-12 mt-3">
                 <div class="form-group">
-                <label for="">account</label>
-                <select name="account_id" id="account_id" class="form-control">
-                
-                </select>
+                  <label for="">qunatity</label>
+                <input type="text" name="quantity" id="quantity" class="form-control" readonly>
                 </div>
 
-            </div>      
+            </div>
+
+
+            <div class="col-sm-12 mt-3">
+                <div class="form-group">
+                  <label for="">rtquantity</label>
+                <input type="number" name="rtquantity" id="rtquantity" class="form-control" placeholder="quantity" required>
+                </div>
+
+            </div>
+
+            <div class="col-sm-12 mt-3">
+                <div class="form-group">
+                  <label for="">Return Date</label>
+                <input type="date" name="return_date" id="return_date" class="form-control" placeholder="return_date" required>
+                </div>
+
+            </div>
 
            
         </div>

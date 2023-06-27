@@ -25,12 +25,12 @@ function fill_customer() {
 
       if (status) {
         response.forEach(res => {
-          html += `<option value="${res['customer_id']}">${res['customer_name']}</option>`;
+          html += `<option value="${res['rent_id']}">${res['customer_name']}</option>`;
 
 
         })
 
-        $("#Customer_id").append(html);
+        $("#rentt_id").append(html);
 
 
       } else {
@@ -130,7 +130,7 @@ $("#paymentform").on("submit", function (event) {
   event.preventDefault();
 
 
-  let Customer_id = $("#Customer_id").val();
+  let rentt_id = $("#rentt_id").val();
   let amount = $("#amount").val();
   let payment_method_id = $("#payment_method_id").val();
   let account_id = $("#account_id").val();
@@ -140,7 +140,7 @@ $("#paymentform").on("submit", function (event) {
 
   if (btnAction == "Insert") {
     sendingData = {
-      "Customer_id": Customer_id,
+      "rentt_id": rentt_id,
       "amount": amount,
       "payment_method_id": payment_method_id,
       "account_id": account_id,
@@ -150,7 +150,7 @@ $("#paymentform").on("submit", function (event) {
   } else {
     sendingData = {
       "payment_id": id,
-      "Customer_id": Customer_id,
+      "rentt_id": rentt_id,
       "amount": amount,
       "payment_method_id": payment_method_id,
       "account_id": account_id,
@@ -306,7 +306,7 @@ $("#Customer_id").on("change", function(){
  if($("#Customer_id").val()== 0){
   $("#amount").val("");
  }else{
-  console.log("kkkkk");
+ // console.log(customers);
  }
   console.log(customers);
 
@@ -323,11 +323,11 @@ $("#paymentform").on("change", "select.customers", function(){
   fill_amount(customers);
 })
 
- function fill_amount(customer_id){
+ function fill_amount(rent_id){
 
   let sendingData={
     "action": "fill_amount",
-    "customer_id": customer_id
+    "rent_id": rent_id
   }
 
   $.ajax({

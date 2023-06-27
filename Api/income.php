@@ -45,9 +45,6 @@ function get_total_balance($conn)
     echo json_encode($data);
 }
 
-
-
-
 function get_all_employee($conn)
 {
     extract($_POST);
@@ -67,7 +64,6 @@ function get_all_employee($conn)
 
     echo json_encode($data);
 }
-
 
 function get_all_users($conn)
 {
@@ -89,6 +85,88 @@ function get_all_users($conn)
     echo json_encode($data);
 }
 
+function get_all_income($conn)
+{
+    extract($_POST);
+    $data = array();
+    $array_data = array();
+    $query = "SELECT SUM(amount) AS Income FROM expense WHERE type='Income'";
+    $result = $conn->query($query);
+
+
+    if ($result) {
+        $row = $result->fetch_assoc();
+
+        $data = array("status" => true, "data" => $row);
+    } else {
+        $data = array("status" => false, "data" => $conn->error);
+    }
+
+    echo json_encode($data);
+}
+
+function get_all_expense($conn)
+{
+    extract($_POST);
+    $data = array();
+    $array_data = array();
+    $query = "SELECT SUM(amount) AS Expense FROM expense WHERE type='Expense'";
+    $result = $conn->query($query);
+
+
+    if ($result) {
+        $row = $result->fetch_assoc();
+
+        $data = array("status" => true, "data" => $row);
+    } else {
+        $data = array("status" => false, "data" => $conn->error);
+    }
+
+    echo json_encode($data);
+}
+
+function get_all_invoice($conn)
+{
+    extract($_POST);
+    $data = array();
+    $array_data = array();
+    $query = "SELECT SUM(amount) AS Expense FROM expense WHERE type='Expense'";
+    $result = $conn->query($query);
+
+
+    if ($result) {
+        $row = $result->fetch_assoc();
+
+        $data = array("status" => true, "data" => $row);
+    } else {
+        $data = array("status" => false, "data" => $conn->error);
+    }
+
+    echo json_encode($data);
+}
+
+function get_all_sum_pending($conn)
+{
+    extract($_POST);
+    $data = array();
+    $array_data = array();
+    $query = "SELECT SUM(r.quantity) as total  FROM rent r JOIN car c ON r.car_id=c.car_id WHERE action='pending'";
+    $result = $conn->query($query);
+
+
+    if ($result) {
+        $row = $result->fetch_assoc();
+
+        $data = array("status" => true, "data" => $row);
+    } else {
+        $data = array("status" => false, "data" => $conn->error);
+    }
+
+    echo json_encode($data);
+}
+
+
+
 
 
 
@@ -100,23 +178,4 @@ if (isset($_POST['action'])) {
 }
 
 
-function read_top($conn)
-{
-    $data = array();
-    $array_data = array();
-    $query = "SELECT e.evaluation_id as ID,concat(s.fristname, ' ', s.lastname) as student_name, concat(i.fristname, ' ', i.lastname) as customer_name,e.Course,r.rating_name,r.points,e.EvaluationDate as Ev_date,e.Comments from evaluation e JOIN employee s on e.student_id=s.student_id JOIN customer i on e.customer_id=i.customer_id join rating r on e.rating_id=r.rating_id order by r.points desc limit 5; 
-   ";
-    $result = $conn->query($query);
 
-
-    if ($result) {
-        while ($row = $result->fetch_assoc()) {
-            $array_data[] = $row;
-        }
-        $data = array("status" => true, "data" => $array_data);
-    } else {
-        $data = array("status" => false, "data" => $conn->error);
-    }
-
-    echo json_encode($data);
-}

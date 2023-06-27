@@ -1,13 +1,13 @@
 // alert("ssuccessfully");
 
-$("#car_name").attr("disabled", true);
+$("#tellophone").attr("disabled", true);
 
 $("#type").on("change", function () {
   if ($("#type").val() == 0) {
-    $("#car_name").attr("disabled", true);
+    $("#tellophone").attr("disabled", true);
 
   } else {
-    $("#car_name").attr("disabled", false);
+    $("#tellophone").attr("disabled", false);
   }
 })
 
@@ -80,11 +80,11 @@ $("#invoice_repo_form").on("submit", function (event) {
   $("#invoice_repo_table tr").html("");
 
 
-  let car_name = $("#car_name").val();
+  let tellophone = $("#tellophone").val();
 
   let sendingData = {
 
-    "car_name": car_name,
+    "tellophone": tellophone,
 
     "action": "get_invoice_repo",
 

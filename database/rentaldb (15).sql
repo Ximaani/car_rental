@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jun 23, 2023 at 12:00 PM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 7.4.29
+-- Host: 127.0.0.1
+-- Generation Time: Jun 27, 2023 at 06:30 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -60,11 +60,11 @@ END IF;
  
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `invoice_report` (IN `_car_name` VARCHAR(100))   BEGIN
-if(_car_name = ' ')THEN
-SELECT concat(cu.fristname,' ', cu.lastname) AS Customer_Name,c.car_name, i.rental_price AS Rent_Per_Day,i.taken_date,i.return_date,i.total_amount  FROM invoice i JOIN customer cu ON i.customer_id=cu.customer_id JOIN rent r on cu.customer_id=r.customer_id JOIN car c on r.car_id=c.car_id;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `invoice_report` (IN `_tellophone` INT)   BEGIN
+if(_tellophone = '0000-00-00')THEN
+SELECT concat(c.fristname,' ',c.lastname) AS customer_name,i.car_id AS Car_name,i.rental_price AS Rent_Per_day,i.taken_date,i.return_date,i.total_amount FROM invoice i JOIN rent r ON i.rent_id=r.rent_id JOIN customer c ON r.customer_id=c.customer_id;
 ELSE
-SELECT concat(cu.fristname,' ', cu.lastname) AS Customer_Name,c.car_name, i.rental_price AS Rent_Per_Day,i.taken_date,i.return_date,i.total_amount  FROM invoice i JOIN customer cu ON i.customer_id=cu.customer_id JOIN rent r on cu.customer_id=r.customer_id JOIN car c on r.car_id=c.car_id WHERE c.car_name =_car_name;
+SELECT concat(c.fristname,' ',c.lastname) AS customer_name,i.car_id AS Car_name,i.rental_price AS Rent_Per_day,i.taken_date,i.return_date,i.total_amount FROM invoice i JOIN rent r ON i.rent_id=r.rent_id JOIN customer c ON r.customer_id=c.customer_id WHERE c.phone =_tellophone;
 END IF;
 END$$
 
@@ -94,15 +94,15 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `payment_repo` (IN `_tellphone` INT)   BEGIN
 if(_tellphone = '0000-00-00')THEN
-SELECT concat(cu.fristname, ' ', cu.lastname) AS Customer_name,p.amount as Total_amount,a.bank_name,pa.method_name,p.date FROM payment p JOIN customer cu ON cu.customer_id=p.customer_id JOIN payment_method pa ON pa.payment_method_id=p.payment_method_id JOIN account a ON a.account_id=p.account_id;
+SELECT concat(c.fristname,' ',c.lastname) AS customer_name,p.amount,a.bank_name FROM payment p JOIN rent r ON p.rent_id=r.rent_id JOIN customer c ON r.customer_id=c.customer_id JOIN account a ON p.account_id=a.account_id;
 ELSE
-SELECT concat(cu.fristname, ' ', cu.lastname) AS Customer_name,p.amount as Total_amount,a.bank_name,pa.method_name,p.date FROM payment p JOIN customer cu ON cu.customer_id=p.customer_id JOIN payment_method pa ON pa.payment_method_id=p.payment_method_id JOIN account a ON a.account_id=p.account_id WHERE cu.phone=_tellphone;
+SELECT concat(c.fristname,' ',c.lastname) AS customer_name,p.amount,a.bank_name FROM payment p JOIN rent r ON p.rent_id=r.rent_id JOIN customer c ON r.customer_id=c.customer_id JOIN account a ON p.account_id=a.account_id WHERE c.phone=_tellphone;
 END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `read_all_rent_per_day` (IN `_customer_id` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `read_all_rent_per_day` (IN `_rent_id` INT)   BEGIN
 
-SELECT c.car_name,c.rental_price,r.taken_date,r.return_date, TIMESTAMPDIFF(DAY,r.taken_date,r.return_date)*c.rental_price as amount from rent r JOIN car c on r.car_id=c.car_id where customer_id=_customer_id;
+SELECT r.rent_id,c.car_name,c.rental_price,r.taken_date,r.return_date, TIMESTAMPDIFF(DAY,r.taken_date,r.return_date)*r.quantity*c.rental_price as amount from rent r JOIN car c on r.car_id=c.car_id where r.rent_id=_rent_id;
 
 END$$
 
@@ -121,6 +121,11 @@ SELECT concat(e.emp_first_name,' ',e.emp_last_name) AS employee_name,j.position,
 
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `read_customer_rent_car` (IN `_rent_id` INT)   BEGIN
+SELECT  r.rent_id,c.car_id,r.quantity from rent r JOIN car c on r.car_id=c.car_id
+WHERE r.action='paid' AND r.rent_id=_rent_id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `read_level` (IN `_course_id` INT)   BEGIN
 
 SELECT c.Course_id,l.level_id,l.level_name  from course c JOIN level l on c.level_id=l.level_id WHERE c.Course_id=_course_id;
@@ -130,8 +135,8 @@ SELECT c.Course_id,l.level_id,l.level_name  from course c JOIN level l on c.leve
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `read_rent_price` (IN `_customer_id` INT)   BEGIN
-SELECT i.total_amount from invoice i  WHERE i.customer_id=_customer_id;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `read_rent_price` (IN `_rent_id` INT)   BEGIN
+SELECT i.total_amount from invoice i  WHERE i.rent_id=_rent_id;
 
 END$$
 
@@ -202,6 +207,18 @@ SELECT concat(cu.fristname,' ',cu.lastname) AS Customer_name,c.car_name,r.taken_
 END IF;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `return_car_insert` (IN `_rent_id` INT, IN `_car_id` VARCHAR(40), IN `_quantity` INT, IN `_rt_quantity` INT, IN `_return_date` DATE)   BEGIN
+
+if(_rt_quantity > _quantity)THEN
+
+SELECT 'Deny' as msg;
+ELSE
+INSERT INTO `returncar`(`rent_id`, `car_id`, `quantity`, `rt_quantity`, `return_date`) 
+VALUES (_rent_id,_car_id,_quantity,_rt_quantity,_return_date);
+SELECT 'Registered' as msg;
+END if;
+END$$
+
 --
 -- Functions
 --
@@ -270,8 +287,8 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`account_id`, `bank_name`, `holder_name`, `account_number`, `balance`, `date`) VALUES
-(1, 'Salaam Bank', 'Mohamed Abdullahi Omer', '1234567', '836', '2023-06-19 14:06:11'),
-(2, 'dahabshiil', 'garaad xuseen', '12345', '600', '2023-06-12 18:53:19'),
+(1, 'Salaam Bank', 'Mohamed Abdullahi Omer', '1234567', '14854', '2023-06-27 16:15:56'),
+(2, 'dahabshiil', 'garaad xuseen', '12345', '3810', '2023-06-27 16:13:48'),
 (3, 'Premmier Bank', 'Raashid moalim', '123459', '19880', '2023-06-18 11:00:58');
 
 -- --------------------------------------------------------
@@ -362,11 +379,11 @@ CREATE TABLE `car` (
 --
 
 INSERT INTO `car` (`car_id`, `car_name`, `car_number`, `modal_id`, `transmission_id`, `type_fuel_id`, `rental_price`, `conditions_id`, `quantity`, `status`, `data`) VALUES
-(1, 'number geni', 'A112', 2, 1, 3, 120, 1, 1, 'availible', '2023-06-23 09:46:23'),
-(3, 'www', '222', 1, 1, 3, 11, 1, 0, 'unavialible', '2023-06-19 18:50:03'),
-(4, 'bmw', '1212', 2, 1, 4, 200, 1, 0, 'unavialible', '2023-06-20 07:50:59'),
-(5, 'v8', '1212', 2, 2, 3, 122, 2, 12, 'availible', '2023-06-23 09:50:04'),
-(6, 'marcedes', 'AB1234', 1, 2, 4, 150, 1, 16, 'availible', '2023-06-23 09:57:59');
+(1, 'Lanbo Geni', 'AB123', 1, 1, 3, 100, 1, 32, 'availible', '2023-06-27 16:10:28'),
+(2, 'hondia', 'AB134', 2, 2, 3, 80, 2, 13, 'availible', '2023-06-27 15:19:29'),
+(3, 'bmw', 'AD1234', 3, 1, 4, 120, 2, 4, 'availible', '2023-06-27 16:16:16'),
+(4, 'marcedes', 'AC2354', 6, 2, 4, 150, 1, 14, 'availible', '2023-06-26 10:27:52'),
+(5, 'barada', 'AB2345', 2, 1, 3, 100, 1, 3, 'availible', '2023-06-26 10:58:56');
 
 -- --------------------------------------------------------
 
@@ -559,7 +576,7 @@ DELIMITER ;
 
 CREATE TABLE `invoice` (
   `invoice_id` varchar(100) NOT NULL,
-  `customer_id` int(11) NOT NULL,
+  `rent_id` int(11) NOT NULL,
   `car_id` varchar(40) NOT NULL,
   `rental_price` decimal(12,0) NOT NULL,
   `taken_date` date NOT NULL,
@@ -572,10 +589,10 @@ CREATE TABLE `invoice` (
 -- Dumping data for table `invoice`
 --
 
-INSERT INTO `invoice` (`invoice_id`, `customer_id`, `car_id`, `rental_price`, `taken_date`, `return_date`, `total_amount`, `date`) VALUES
-('INV001', 1, 'number geni', '120', '2023-06-23', '2023-06-25', '240', '2023-06-23 09:46:58'),
-('INV002', 1, 'v8', '122', '2023-06-23', '2023-07-09', '1952', '2023-06-23 09:51:13'),
-('INV003', 1, 'marcedes', '150', '2023-06-23', '2023-06-27', '600', '2023-06-23 09:58:33');
+INSERT INTO `invoice` (`invoice_id`, `rent_id`, `car_id`, `rental_price`, `taken_date`, `return_date`, `total_amount`, `date`) VALUES
+('INV001', 1, 'Lanbo Geni', '100', '2023-06-27', '2023-06-30', '300', '2023-06-27 16:09:50'),
+('INV002', 2, 'bmw', '120', '2023-06-27', '2023-06-29', '240', '2023-06-27 16:13:33'),
+('INV003', 3, 'bmw', '120', '2023-06-27', '2023-07-01', '480', '2023-06-27 16:15:35');
 
 --
 -- Triggers `invoice`
@@ -583,8 +600,8 @@ INSERT INTO `invoice` (`invoice_id`, `customer_id`, `car_id`, `rental_price`, `t
 DELIMITER $$
 CREATE TRIGGER `update_invoice_active` AFTER INSERT ON `invoice` FOR EACH ROW BEGIN
 
-update rent set action ='Invoiced'
-WHERE customer_id=new.customer_id;
+update rent r set r.action ='Invoiced'
+WHERE r.rent_id=new.rent_id;
 
 
 END
@@ -666,7 +683,7 @@ INSERT INTO `month` (`month_id`, `month_name`) VALUES
 
 CREATE TABLE `payment` (
   `payment_id` int(11) NOT NULL,
-  `customer_id` int(11) NOT NULL,
+  `rent_id` int(11) NOT NULL,
   `amount` decimal(9,2) NOT NULL,
   `payment_method_id` int(11) NOT NULL,
   `account_id` int(11) NOT NULL,
@@ -674,13 +691,29 @@ CREATE TABLE `payment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`payment_id`, `rent_id`, `amount`, `payment_method_id`, `account_id`, `date`) VALUES
+(1, 1, '300.00', 6, 2, '2023-06-27 16:10:10'),
+(2, 2, '240.00', 6, 2, '2023-06-27 16:13:48'),
+(3, 3, '480.00', 1, 1, '2023-06-27 16:15:56');
+
+--
 -- Triggers `payment`
 --
+DELIMITER $$
+CREATE TRIGGER `update_acount_balance` BEFORE INSERT ON `payment` FOR EACH ROW BEGIN
+UPDATE account SET balance= balance+new.amount
+WHERE account_id=new.account_id;
+END
+$$
+DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `update_rent_paid_active` BEFORE INSERT ON `payment` FOR EACH ROW BEGIN
 
 update rent set action ='Paid'
-WHERE customer_id=new.customer_id;
+WHERE rent_id=new.rent_id;
 
 
 END
@@ -729,9 +762,9 @@ CREATE TABLE `rent` (
 --
 
 INSERT INTO `rent` (`rent_id`, `customer_id`, `car_id`, `quantity`, `taken_date`, `return_date`, `action`, `date`) VALUES
-(1, 1, 1, 1, '2023-06-23', '2023-06-25', 'Invoiced', '2023-06-23 09:46:58'),
-(3, 1, 5, 1, '2023-06-23', '2023-07-09', 'Invoiced', '2023-06-23 09:51:13'),
-(4, 1, 6, 1, '2023-06-23', '2023-06-27', 'Invoiced', '2023-06-23 09:58:33');
+(1, 1, 1, 1, '2023-06-27', '2023-06-30', 'Returned', '2023-06-27 16:10:28'),
+(2, 1, 3, 1, '2023-06-27', '2023-06-29', 'Returned', '2023-06-27 16:14:08'),
+(3, 1, 3, 1, '2023-06-27', '2023-07-01', 'Returned', '2023-06-27 16:16:16');
 
 --
 -- Triggers `rent`
@@ -748,6 +781,51 @@ DELIMITER $$
 CREATE TRIGGER `yes` AFTER INSERT ON `rent` FOR EACH ROW BEGIN 
 Update car set quantity = quantity - NEW.quantity
 where car_id = NEW.car_id;
+
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `returncar`
+--
+
+CREATE TABLE `returncar` (
+  `returncar_id` int(11) NOT NULL,
+  `rent_id` int(11) NOT NULL,
+  `car_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `rt_quantity` int(11) NOT NULL,
+  `return_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `returncar`
+--
+
+INSERT INTO `returncar` (`returncar_id`, `rent_id`, `car_id`, `quantity`, `rt_quantity`, `return_date`) VALUES
+(1, 1, 1, 1, 1, '2023-06-27'),
+(2, 2, 3, 1, 1, '2023-06-27'),
+(3, 3, 3, 1, 1, '2023-06-27');
+
+--
+-- Triggers `returncar`
+--
+DELIMITER $$
+CREATE TRIGGER `update_car_quantity` AFTER INSERT ON `returncar` FOR EACH ROW BEGIN 
+Update car c set quantity = quantity + NEW.rt_quantity
+where c.car_id =NEW.car_id;
+
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `update_rent_paid` BEFORE INSERT ON `returncar` FOR EACH ROW BEGIN
+
+UPDATE rent r set r.action='Returned' WHERE 
+r.rent_id=new.rent_id;
 
 END
 $$
@@ -813,7 +891,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `emp_id`, `username`, `password`, `image`, `status`, `date`) VALUES
-('USR001', 1, 'anwar', '81dc9bdb52d04dc20036dbd8313ed055', 'USR001.png', 'active', '2023-06-08 20:53:17'),
+('USR001', 1, 'anwarr', 'd41d8cd98f00b204e9800998ecf8427e', 'USR001.png', 'active', '2023-06-24 18:17:15'),
 ('USR002', 3, 'kk', 'd41d8cd98f00b204e9800998ecf8427e', 'USR002.png', 'active', '2023-06-11 19:42:50'),
 ('USR003', 4, 'ximaani', '81dc9bdb52d04dc20036dbd8313ed055', 'USR003.png', 'active', '2023-06-12 12:44:20'),
 ('USR004', 8, 'misbil', '81dc9bdb52d04dc20036dbd8313ed055', 'USR004.png', 'active', '2023-06-18 10:44:17');
@@ -889,7 +967,7 @@ ALTER TABLE `expense`
 --
 ALTER TABLE `invoice`
   ADD KEY `car_id` (`car_id`),
-  ADD KEY `customer_id` (`customer_id`);
+  ADD KEY `customer_id` (`rent_id`);
 
 --
 -- Indexes for table `jop_title`
@@ -915,7 +993,7 @@ ALTER TABLE `month`
 ALTER TABLE `payment`
   ADD PRIMARY KEY (`payment_id`),
   ADD KEY `Course_id` (`payment_method_id`),
-  ADD KEY `instructor_id` (`customer_id`),
+  ADD KEY `instructor_id` (`rent_id`),
   ADD KEY `level_id` (`account_id`);
 
 --
@@ -928,7 +1006,14 @@ ALTER TABLE `payment_method`
 -- Indexes for table `rent`
 --
 ALTER TABLE `rent`
-  ADD PRIMARY KEY (`rent_id`);
+  ADD PRIMARY KEY (`rent_id`),
+  ADD KEY `rent_ibfk_1` (`customer_id`);
+
+--
+-- Indexes for table `returncar`
+--
+ALTER TABLE `returncar`
+  ADD PRIMARY KEY (`returncar_id`);
 
 --
 -- Indexes for table `transmission`
@@ -974,7 +1059,7 @@ ALTER TABLE `branch`
 -- AUTO_INCREMENT for table `car`
 --
 ALTER TABLE `car`
-  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `charge`
@@ -1028,7 +1113,7 @@ ALTER TABLE `month`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `payment_method`
@@ -1040,7 +1125,13 @@ ALTER TABLE `payment_method`
 -- AUTO_INCREMENT for table `rent`
 --
 ALTER TABLE `rent`
-  MODIFY `rent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `rent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `returncar`
+--
+ALTER TABLE `returncar`
+  MODIFY `returncar_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `transmission`

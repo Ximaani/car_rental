@@ -13,7 +13,7 @@ function get_invoice_repo($conn)
     $data = array();
     $message = array();
     // read all students in the database
-    $query = "call invoice_report('$car_name')";
+    $query = "call invoice_report('$tellophone')";
 
 
     // excute the query

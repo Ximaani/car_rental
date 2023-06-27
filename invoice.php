@@ -129,7 +129,7 @@ include 'include/nav.php';
         <div class="col-sm-6">
                 <div class="form-group">
                 <label for="">customer_name</label>
-                <select name="customers_id" id="customers_id" class="form-control customer_name">
+                <select name="Rent_id" id="Rent_id" class="form-control customer_name">
                 <option value="o">select customer_name</option>
                 </select>
                 </div>

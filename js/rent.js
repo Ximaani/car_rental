@@ -2,7 +2,9 @@ loadrent();
 // get_rent();
 fill_customer();
 fill_car();
+load_car_rent_pending();
 btnAction = "Insert";
+
 function fill_customer() {
 
   let sendingData = {
@@ -181,8 +183,18 @@ function loadrent() {
            if(r == "action"){
             if(res[r] == "pending"){
               tr += `<td><span class="badge bg-danger text-white ">${res[r]}</span></td>`;
-            }else{
-              tr += `<td><span class="badge bg-info text-white">${res[r]}</span></td>`;
+            }else if(res[r] == "Invoiced"){
+              tr += `<td><span class="badge bg-warning text-white ">${res[r]}</span></td>`;
+            }
+            else if(res[r] == "Returned"){
+              tr += `<td><span class="badge bg-primary text-white ">${res[r]}</span></td>`;
+            }
+            else if(res[r] == "Paid"){
+              tr += `<td><span class="badge bg-success text-white ">${res[r]}</span></td>`;
+            }
+          
+            else{
+              tr += `<td><span class="badge bg-warning text-white">${res[r]}</span></td>`;
             }
            }else{
             tr += `<td>${res[r]}</td>`;
@@ -199,6 +211,62 @@ function loadrent() {
         $("#rentTable thead").append(th);
         $("#rentTable tbody").append(tr);
     }
+
+    },
+    error: function (data) {
+
+    }
+
+  })
+}
+
+function load_car_rent_pending() {
+  $("#top_car_pending tbody").html('');
+  $("#top_car_pending thead").html('');
+
+  let sendingData = {
+    "action": "read_all_rent_car_pending"
+  }
+
+  $.ajax({
+    method: "POST",
+    dataType: "JSON",
+    url: "Api/rent.php",
+    data: sendingData,
+
+    success: function (data) {
+      let status = data.status;
+      let response = data.data;
+      let html = '';
+      let tr = '';
+      let th = '';
+
+      if (status) {
+        response.forEach(res => {
+          th = "<tr>";
+          for (let r in res) {
+            th += `<th>${r}</th>`;
+          }
+
+
+
+
+
+          tr += "<tr>";
+          for (let r in res) {
+
+
+            tr += `<td>${res[r]}</td>`;
+
+
+          }
+
+          tr += "</tr>"
+
+        })
+        $("#top_car_pending thead").append(th);
+        $("#top_car_pending tbody").append(tr);
+      }
 
     },
     error: function (data) {

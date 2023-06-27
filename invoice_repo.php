@@ -54,7 +54,7 @@ include 'include/nav.php';
                   
 
                     <div class="col-sm-5">
-                        <input type="text" name="car_name" id="car_name" class="form-control">
+                        <input type="int" name="tellophone" id="tellophone" class="form-control">
                     </div>
 
 

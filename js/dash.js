@@ -2,6 +2,9 @@
 get_total_balance();
 get_all_employee();
 get_all_users();
+get_all_Income();
+get_all_sum_pending();
+get_all_Expenses();
 get_total_customer();
 
 
@@ -145,6 +148,113 @@ function get_all_users() {
 
 
                 document.querySelector("#users").innerText = response['users']
+
+
+            } else {
+
+            }
+
+        },
+        error: function (data) {
+
+        }
+
+    })
+}
+
+function get_all_Income() {
+
+    let sendingData = {
+        "action": "get_all_income"
+
+    }
+
+    $.ajax({
+        method: "POST",
+        dataType: "JSON",
+        url: "Api/income.php",
+        data: sendingData,
+
+        success: function (data) {
+            let status = data.status;
+            let response = data.data;
+
+
+            if (status) {
+
+
+                document.querySelector("#total_income").innerText = response['Income']
+
+
+            } else {
+
+            }
+
+        },
+        error: function (data) {
+
+        }
+
+    })
+}
+function get_all_Expenses() {
+
+    let sendingData = {
+        "action": "get_all_expense"
+
+    }
+
+    $.ajax({
+        method: "POST",
+        dataType: "JSON",
+        url: "Api/income.php",
+        data: sendingData,
+
+        success: function (data) {
+            let status = data.status;
+            let response = data.data;
+
+
+            if (status) {
+
+
+                document.querySelector("#total_expense").innerText = response['Expense']
+
+
+            } else {
+
+            }
+
+        },
+        error: function (data) {
+
+        }
+
+    })
+}
+
+function get_all_sum_pending() {
+
+    let sendingData = {
+        "action": "get_all_sum_pending"
+
+    }
+
+    $.ajax({
+        method: "POST",
+        dataType: "JSON",
+        url: "Api/income.php",
+        data: sendingData,
+
+        success: function (data) {
+            let status = data.status;
+            let response = data.data;
+
+
+            if (status) {
+
+
+                document.querySelector("#total_sum_pending").innerText = response['total']
 
 
             } else {

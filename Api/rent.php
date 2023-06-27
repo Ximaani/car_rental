@@ -42,7 +42,7 @@ function register_rent($conn){
 function read_all_rent($conn){
     $data = array();
     $array_data = array();
-   $query ="SELECT concat(c.fristname, ' ', c.lastname) as customer_name, ca.car_name,ca.rental_price as rental_per_day,r.taken_date,r.return_date,r.action from rent r JOIN customer c on r.customer_id=c.customer_id JOIN car ca on r.car_id=ca.car_id ";
+   $query ="SELECT r.rent_id, concat(c.fristname, ' ', c.lastname) as customer_name, ca.car_name,r.quantity, ca.rental_price as rental_per_day,r.taken_date,r.return_date,r.action from rent r JOIN customer c on r.customer_id=c.customer_id JOIN car ca on r.car_id=ca.car_id ";
     $result = $conn->query($query);
 
 
@@ -87,6 +87,33 @@ function read_all_customer_name($conn){
     $data = array();
     $array_data = array();
    $query ="SELECT c.customer_id, concat(c.fristname, ' ', c.lastname) as customer_name  from rent r JOIN customer c on r.customer_id=c.customer_id";
+    $result = $conn->query($query);
+
+
+    if($result){
+        while($row = $result->fetch_assoc()){
+            $array_data[] = $row;
+        }
+        $data = array("status" => true, "data" => $array_data);
+
+
+    }else{
+        $data = array("status" => false, "data"=> $conn->error);
+             
+    }
+
+    echo json_encode($data);
+}
+
+function read_all_rent_car_pending($conn){
+    $data = array();
+    $array_data = array();
+
+  // $query ="SELECT p.payment_id,concat(c.fristname, ' ', c.lastname) as customer_name, p.amount as Total_amount, pm.method_name, ac.bank_name FROM payment p JOIN customer c on p.customer_id=c.customer_id JOIN payment_method pm on p.payment_method_id=pm.payment_method_id
+  // JOIN account ac on p.account_id=ac.account_id";
+
+   $query ="SELECT car_name,car_number,quantity from car WHERE car_id NOT IN (SELECT car_id from rent)";
+
     $result = $conn->query($query);
 
 
@@ -152,27 +179,27 @@ function update_rent($conn){
     echo json_encode($data);
 }
 
-function Delete_rent($conn){
-    extract($_POST);
-    $data = array();
-    $array_data = array();
-   $query ="DELETE FROM rent where rent_id= '$rent_id'";
-    $result = $conn->query($query);
+// function Delete_rent($conn){
+//     extract($_POST);
+//     $data = array();
+//     $array_data = array();
+//    $query ="DELETE FROM rent where rent_id= '$rent_id'";
+//     $result = $conn->query($query);
 
 
-    if($result){
+//     if($result){
    
         
-        $data = array("status" => true, "data" => "successfully Deleted😎");
+//         $data = array("status" => true, "data" => "successfully Deleted😎");
 
 
-    }else{
-        $data = array("status" => false, "data"=> $conn->error);
+//     }else{
+//         $data = array("status" => false, "data"=> $conn->error);
              
-    }
+//     }
 
-    echo json_encode($data);
-}
+//     echo json_encode($data);
+// }
 
 
 if(isset($_POST['action'])){

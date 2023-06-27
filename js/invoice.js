@@ -22,12 +22,12 @@ function fill_customers() {
 
       if (status) {
         response.forEach(res => {
-          html += `<option value="${res['customer_id']}">${res['customer_name']}</option>`;
+          html += `<option value="${res['rent_id']}">${res['customer_name']}</option>`;
 
 
         })
 
-        $("#customers_id").append(html);
+        $("#Rent_id").append(html);
 
 
       } else {
@@ -47,7 +47,7 @@ $("#invoiceform").on("submit", function (event) {
   event.preventDefault();
 
 
-  let customers_id = $("#customers_id").val();
+  let Rent_id = $("#Rent_id").val();
   let cars_id = $("#cars_id").val();
   let rental_price = $("#rental_price").val();
   let taken_date = $("#taken_date").val();
@@ -59,7 +59,7 @@ $("#invoiceform").on("submit", function (event) {
 
   if (btnAction == "Insert") {
     sendingData = {
-      "customers_id": customers_id,
+      "Rent_id": Rent_id,
       "cars_id": cars_id,
       "rental_price": rental_price,
       "taken_date": taken_date,
@@ -71,7 +71,7 @@ $("#invoiceform").on("submit", function (event) {
   } else {
     sendingData = {
       "invoice_id": id,
-      "customers_id": customers_id,
+      "Rent_id": Rent_id,
       "cars_id": cars_id,
       "rental_price": rental_price,
       "taken_date": taken_date,
@@ -185,18 +185,18 @@ function loadinvoice() {
 //  })
  
  
- $("#customers_id").on("change", function(){
+ $("#Rent_id").on("change", function(){
  
-   let customers_id=$(this).val();
+   let rent_id=$(this).val();
   
-   fill_price(customers_id);
+   fill_price(rent_id);
  })
 
- function fill_price(customer_id){
+ function fill_price(rent_id){
 
   let sendingData={
     "action": "read_rent_price",
-    "customer_id": customer_id
+    "rent_id": rent_id
   }
 
   $.ajax({
